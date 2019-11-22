@@ -17,6 +17,10 @@
 #include <valarray> // valarray
 #include <vector> // vector
 
+#ifdef JSON_HAS_CPP_17
+    #include <optional> // optional
+#endif
+
 #include <nlohmann/detail/iterators/iteration_proxy.hpp>
 #include <nlohmann/detail/macro_scope.hpp>
 #include <nlohmann/detail/meta/cpp_future.hpp>
@@ -259,6 +263,22 @@ struct external_constructor<value_t::object>
 /////////////
 // to_json //
 /////////////
+
+#ifdef JSON_HAS_CPP_17
+template<typename BasicJsonType, typename T,
+         enable_if_t<std::is_constructible<BasicJsonType, T>::value, int> = 0>
+void to_json(BasicJsonType& j, const std::optional<T>& opt)
+{
+    if (opt.has_value())
+    {
+        j = *opt;
+    }
+    else
+    {
+        j = nullptr;
+    }
+}
+#endif
 
 template<typename BasicJsonType, typename T,
          enable_if_t<std::is_same<T, typename BasicJsonType::boolean_t>::value, int> = 0>

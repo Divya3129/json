@@ -169,14 +169,6 @@
 #include <utility> // pair, declval
 #include <valarray> // valarray
 
-#ifdef JSON_HAS_CPP_17
-    #if __has_include(<optional>)
-        #include <optional>
-    #elif __has_include(<experimental/optional>)
-        #include <experimental/optional>
-    #endif
-#endif
-
 // #include <nlohmann/detail/exceptions.hpp>
 //     __ _____ _____ _____
 //  __|  |   __|     |   | |  JSON for Modern C++
@@ -2511,6 +2503,20 @@ JSON_HEDLEY_DIAGNOSTIC_POP
     #define JSON_NO_UNIQUE_ADDRESS [[no_unique_address]]
 #else
     #define JSON_NO_UNIQUE_ADDRESS
+
+#ifdef JSON_HAS_CPP_17
+    #if __has_include(<optional>)
+        #include <optional>
+    #elif __has_include(<experimental/optional>)
+        #include <experimental/optional>
+    #endif
+#endif
+
+// disable float-equal warnings on GCC/clang
+#if defined(__clang__) || defined(__GNUC__) || defined(__GNUG__)
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wfloat-equal"
+>>>>>>> 1b846c9d (Use JSON_HAS_CPP_17 only after it has been defined)
 #endif
 
 // disable documentation warnings on clang
@@ -5191,14 +5197,6 @@ NLOHMANN_JSON_NAMESPACE_END
 #include <utility> // move, forward, declval, pair
 #include <valarray> // valarray
 #include <vector> // vector
-
-#ifdef JSON_HAS_CPP_17
-    #if __has_include(<optional>)
-        #include <optional>
-    #elif __has_include(<experimental/optional>)
-        #include <experimental/optional>
-    #endif
-#endif
 
 // #include <nlohmann/detail/iterators/iteration_proxy.hpp>
 //     __ _____ _____ _____

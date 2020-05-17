@@ -40,8 +40,15 @@ DOCTEST_CLANG_SUPPRESS_WARNING("-Wexit-time-destructors")
     #define JSON_HAS_CPP_14
 #endif
 
+#ifdef JSON_HAS_CPP_17
+    #if __has_include(<optional>)
+        #include <optional>
+    #elif __has_include(<experimental/optional>)
+        #include <experimental/optional>
+    #endif
+#endif
+
 #if defined(JSON_HAS_CPP_17)
-    #include <optional>
     #include <string_view>
 #endif
 

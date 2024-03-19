@@ -47,6 +47,10 @@
     #define JSON_HAS_CPP_11
 #endif
 
+#ifdef JSON_HAS_CPP_17
+    #include <optional>
+#endif
+
 // disable float-equal warnings on GCC/clang
 #if defined(__clang__) || defined(__GNUC__) || defined(__GNUG__)
     #pragma GCC diagnostic push
@@ -157,10 +161,6 @@
     #define JSON_NO_UNIQUE_ADDRESS [[no_unique_address]]
 #else
     #define JSON_NO_UNIQUE_ADDRESS
-
-#ifdef JSON_HAS_CPP_17
-    #include <optional>
-#endif
 
 // disable documentation warnings on clang
 #if defined(__clang__)

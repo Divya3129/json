@@ -2512,7 +2512,6 @@ JSON_HEDLEY_DIAGNOSTIC_POP
 #if defined(__clang__) || defined(__GNUC__) || defined(__GNUG__)
     #pragma GCC diagnostic push
     #pragma GCC diagnostic ignored "-Wfloat-equal"
->>>>>>> 1b846c9d (Use JSON_HAS_CPP_17 only after it has been defined)
 #endif
 
 // disable documentation warnings on clang
@@ -4716,7 +4715,7 @@ void from_json(const BasicJsonType& j, std::optional<T>& opt)
     }
     else
     {
-        opt = j.template get<T>();
+        opt.emplace(j.template get<T>());
     }
 }
 #endif

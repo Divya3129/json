@@ -172,10 +172,8 @@ TEST_CASE("value conversion")
         }
     }
 
-<<<<<<< HEAD:tests/src/unit-conversions.cpp
 #if JSON_USE_IMPLICIT_CONVERSIONS
-=======
->>>>>>> df30a0ea (:construction: conversions for std::optional):test/src/unit-conversions.cpp
+
     SECTION("get an object (implicit)")
     {
         const json::object_t o_reference = {{"object", json::object()},
@@ -1592,10 +1590,9 @@ TEST_CASE("JSON to enum mapping")
     }
 }
 
-<<<<<<< HEAD:tests/src/unit-conversions.cpp
-DOCTEST_CLANG_SUPPRESS_WARNING_POP
-=======
+
 #ifdef JSON_HAS_CPP_17
+#ifndef JSON_USE_IMPLICIT_CONVERSIONS
 TEST_CASE("std::optional")
 {
     SECTION("null")
@@ -1631,7 +1628,7 @@ TEST_CASE("std::optional")
         std::optional<int> opt_int = 1;
 
         CHECK(json(opt_int) == j_number);
-        CHECK(std::optional<int>(j_number) == opt_int);
+        CHECK(j_number.get<std::optional<int>>() == opt_int);
     }
 
     SECTION("array")
@@ -1640,7 +1637,7 @@ TEST_CASE("std::optional")
         std::vector<std::optional<int>> opt_array = {{1, 2, std::nullopt}};
 
         CHECK(json(opt_array) == j_array);
-        CHECK(std::vector<std::optional<int>>(j_array) == opt_array);
+        CHECK(j_array.get<std::vector<std::optional<int>>>() == opt_array);
     }
 
     SECTION("object")
@@ -1653,4 +1650,13 @@ TEST_CASE("std::optional")
     }
 }
 #endif
->>>>>>> df30a0ea (:construction: conversions for std::optional):test/src/unit-conversions.cpp
+#endif
+
+#ifdef JSON_HAS_CPP_17
+    #undef JSON_HAS_CPP_17
+#endif
+
+#ifdef JSON_HAS_CPP_14
+    #undef JSON_HAS_CPP_14
+#endif
+DOCTEST_CLANG_SUPPRESS_WARNING_POP

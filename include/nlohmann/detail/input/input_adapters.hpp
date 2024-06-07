@@ -68,6 +68,13 @@ class file_input_adapter
         return std::fgetc(m_file);
     }
 
+    // returns the number of characters successfully read
+    template<class T>
+    std::size_t get_elements(T* dest, std::size_t count = 1)
+    {
+        return fread(dest, 1, sizeof(T) * count, m_file);
+    }
+
   private:
     /// the file pointer to read from
     std::FILE* m_file;
@@ -127,6 +134,17 @@ class input_stream_adapter
         return res;
     }
 
+    template<class T>
+    std::size_t get_elements(T* dest, std::size_t count = 1)
+    {
+        auto res = sb->sgetn(reinterpret_cast<char*>(dest), count * sizeof(T));
+        if (JSON_HEDLEY_UNLIKELY(res < count * sizeof(T)))
+        {
+            is->clear(is->rdstate() | std::ios::eofbit);
+        }
+        return static_cast<std::size_t>(res);
+    }
+
   private:
     /// the associated input stream
     std::istream* is = nullptr;
@@ -156,6 +174,26 @@ class iterator_input_adapter
         }
 
         return char_traits<char_type>::eof();
+    }
+
+    // for general iterators, we cannot really do something better than falling back to processing the range one-by-one
+    template<class T>
+    std::size_t get_elements(T* dest, std::size_t count = 1)
+    {
+        auto ptr = reinterpret_cast<char*>(dest);
+        for (std::size_t read_index = 0; read_index < count * sizeof(T); ++read_index)
+        {
+            if (JSON_HEDLEY_LIKELY(current != end))
+            {
+                ptr[read_index] = *current;
+                std::advance(current, 1);
+            }
+            else
+            {
+                return read_index;
+            }
+        }
+        return count * sizeof(T);
     }
 
   private:
@@ -319,6 +357,13 @@ class wide_string_input_adapter
         JSON_ASSERT(utf8_bytes_filled > 0);
         JSON_ASSERT(utf8_bytes_index < utf8_bytes_filled);
         return utf8_bytes[utf8_bytes_index++];
+    }
+
+    template<class T>
+    std::size_t get_elements(T*, std::size_t = 1)
+    {
+        JSON_THROW(other_error::create(500, "Unexpected get_elements call to wchar input adapter", nullptr));
+        return 0;
     }
 
   private:

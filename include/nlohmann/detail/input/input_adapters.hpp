@@ -137,7 +137,7 @@ class input_stream_adapter
     template<class T>
     std::size_t get_elements(T* dest, std::size_t count = 1)
     {
-        auto res = sb->sgetn(reinterpret_cast<char*>(dest), count * sizeof(T));
+        auto res = sb->sgetn(reinterpret_cast<char*>(dest), static_cast<std::streamsize>(count * sizeof(T)));
         if (JSON_HEDLEY_UNLIKELY(res < count * sizeof(T)))
         {
             is->clear(is->rdstate() | std::ios::eofbit);
@@ -360,10 +360,14 @@ class wide_string_input_adapter
     }
 
     template<class T>
-    std::size_t get_elements(T*, std::size_t = 1)
+    std::size_t get_elements(T* dest, std::size_t count = 1)
     {
-        JSON_THROW(other_error::create(500, "Unexpected get_elements call to wchar input adapter", nullptr));
-        return 0;
+        auto ptr = reinterpret_cast<char*>(dest);
+        for (std::size_t read_index = 0; read_index < count * sizeof(T); ++read_index)
+        {
+            ptr[read_index] = static_cast<char>(get_character());
+        }
+        return count * sizeof(T);
     }
 
   private:

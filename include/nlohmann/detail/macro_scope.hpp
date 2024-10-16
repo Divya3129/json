@@ -10,12 +10,12 @@
 
 #include <utility> // declval, pair
 #include <nlohmann/detail/meta/detected.hpp>
-#include <nlohmann/thirdparty/hedley/hedley.hpp>
+#include <nlohmann/thirdparty/hedley/hedley.hpp>  // IWYU pragma: export
 
 // This file contains all internal macro definitions (except those affecting ABI)
 // You MUST include macro_unscope.hpp at the end of json.hpp to undef all of them
 
-#include <nlohmann/detail/abi_macros.hpp>
+#include <nlohmann/detail/abi_macros.hpp>  // IWYU pragma: export
 
 // exclude unsupported compilers
 #if !defined(JSON_SKIP_UNSUPPORTED_COMPILER_CHECK)

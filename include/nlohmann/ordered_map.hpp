@@ -17,7 +17,6 @@
 #include <utility> // pair
 #include <vector> // vector
 
-#include <nlohmann/detail/abi_macros.hpp>
 #include <nlohmann/detail/macro_scope.hpp>
 #include <nlohmann/detail/meta/type_traits.hpp>
 

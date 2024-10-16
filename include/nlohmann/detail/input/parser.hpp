@@ -15,7 +15,6 @@
 #include <utility> // move
 #include <vector> // vector
 
-#include <nlohmann/detail/abi_macros.hpp>
 #include <nlohmann/detail/exceptions.hpp>
 #include <nlohmann/detail/input/input_adapters.hpp>
 #include <nlohmann/detail/input/json_sax.hpp>

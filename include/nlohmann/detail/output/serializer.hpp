@@ -22,7 +22,6 @@
 #include <type_traits> // is_same
 #include <utility> // move
 
-#include <nlohmann/detail/abi_macros.hpp>
 #include <nlohmann/detail/conversions/to_chars.hpp>
 #include <nlohmann/detail/exceptions.hpp>
 #include <nlohmann/detail/macro_scope.hpp>

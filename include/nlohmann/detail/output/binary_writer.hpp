@@ -20,7 +20,6 @@
 #include <utility> // move
 #include <vector> // vector
 
-#include <nlohmann/detail/abi_macros.hpp>
 #include <nlohmann/detail/input/binary_reader.hpp>
 #include <nlohmann/detail/macro_scope.hpp>
 #include <nlohmann/detail/output/output_adapters.hpp>

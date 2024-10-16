@@ -8,7 +8,6 @@
 
 #pragma once
 
-#include <nlohmann/detail/abi_macros.hpp>
 #include <nlohmann/detail/macro_scope.hpp>
 
 #if JSON_HAS_EXPERIMENTAL_FILESYSTEM

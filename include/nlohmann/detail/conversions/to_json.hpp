@@ -18,7 +18,6 @@
 #include <valarray> // valarray
 #include <vector> // vector
 
-#include <nlohmann/detail/abi_macros.hpp>
 #include <nlohmann/detail/iterators/iteration_proxy.hpp>
 #include <nlohmann/detail/macro_scope.hpp>
 #include <nlohmann/detail/meta/cpp_future.hpp>

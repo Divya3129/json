@@ -17,7 +17,6 @@
 #include <string> // to_string
 #include <vector> // vector
 
-#include <nlohmann/detail/abi_macros.hpp>
 #include <nlohmann/detail/value_t.hpp>
 #include <nlohmann/detail/string_escape.hpp>
 #include <nlohmann/detail/input/position_t.hpp>

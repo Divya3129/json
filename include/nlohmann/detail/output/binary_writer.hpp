@@ -16,13 +16,17 @@
 #include <cstring> // memcpy
 #include <limits> // numeric_limits
 #include <string> // string
+#include <type_traits>
 #include <utility> // move
 #include <vector> // vector
 
+#include <nlohmann/detail/abi_macros.hpp>
 #include <nlohmann/detail/input/binary_reader.hpp>
 #include <nlohmann/detail/macro_scope.hpp>
 #include <nlohmann/detail/output/output_adapters.hpp>
 #include <nlohmann/detail/string_concat.hpp>
+#include <nlohmann/detail/value_t.hpp>
+#include <nlohmann/detail/meta/cpp_future.hpp>
 
 NLOHMANN_JSON_NAMESPACE_BEGIN
 namespace detail

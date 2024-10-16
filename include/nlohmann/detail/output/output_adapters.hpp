@@ -20,6 +20,7 @@
     #include <ostream>  // basic_ostream
 #endif  // JSON_NO_IO
 
+#include <nlohmann/detail/abi_macros.hpp>
 #include <nlohmann/detail/macro_scope.hpp>
 
 NLOHMANN_JSON_NAMESPACE_BEGIN

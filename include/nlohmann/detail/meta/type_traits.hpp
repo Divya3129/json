@@ -14,6 +14,7 @@
 #include <tuple> // tuple
 #include <string> // char_traits
 
+#include <nlohmann/detail/abi_macros.hpp>
 #include <nlohmann/detail/iterators/iterator_traits.hpp>
 #include <nlohmann/detail/macro_scope.hpp>
 #include <nlohmann/detail/meta/call_std/begin.hpp>

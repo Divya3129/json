@@ -21,6 +21,7 @@
 #include <utility> // make_pair, move
 #include <vector> // vector
 
+#include <nlohmann/detail/abi_macros.hpp>
 #include <nlohmann/detail/exceptions.hpp>
 #include <nlohmann/detail/input/input_adapters.hpp>
 #include <nlohmann/detail/input/json_sax.hpp>
@@ -30,6 +31,7 @@
 #include <nlohmann/detail/meta/type_traits.hpp>
 #include <nlohmann/detail/string_concat.hpp>
 #include <nlohmann/detail/value_t.hpp>
+#include <nlohmann/thirdparty/hedley/hedley.hpp>
 
 NLOHMANN_JSON_NAMESPACE_BEGIN
 namespace detail

@@ -13,9 +13,11 @@
 #include <utility> // move
 #include <vector> // vector
 
+#include <nlohmann/detail/abi_macros.hpp>
 #include <nlohmann/detail/exceptions.hpp>
 #include <nlohmann/detail/macro_scope.hpp>
 #include <nlohmann/detail/string_concat.hpp>
+#include <nlohmann/thirdparty/hedley/hedley.hpp>
 
 NLOHMANN_JSON_NAMESPACE_BEGIN
 

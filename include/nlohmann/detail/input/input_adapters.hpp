@@ -23,6 +23,7 @@
     #include <istream>  // istream
 #endif                  // JSON_NO_IO
 
+#include <nlohmann/detail/abi_macros.hpp>
 #include <nlohmann/detail/iterators/iterator_traits.hpp>
 #include <nlohmann/detail/macro_scope.hpp>
 #include <nlohmann/detail/meta/type_traits.hpp>

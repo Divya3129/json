@@ -12,6 +12,7 @@
 #include <string> // string
 #include <utility> // forward
 
+#include <nlohmann/detail/abi_macros.hpp>
 #include <nlohmann/detail/meta/cpp_future.hpp>
 #include <nlohmann/detail/meta/detected.hpp>
 

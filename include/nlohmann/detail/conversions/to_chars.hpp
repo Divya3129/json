@@ -16,7 +16,9 @@
 #include <limits> // numeric_limits
 #include <type_traits> // conditional
 
+#include <nlohmann/detail/abi_macros.hpp>
 #include <nlohmann/detail/macro_scope.hpp>
+#include <nlohmann/thirdparty/hedley/hedley.hpp>
 
 NLOHMANN_JSON_NAMESPACE_BEGIN
 namespace detail

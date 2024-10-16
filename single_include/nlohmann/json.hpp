@@ -31,6 +31,19 @@
 #include <utility> // declval, forward, move, pair, swap
 #include <vector> // vector
 
+// #include <nlohmann/adl_serializer.hpp>
+//     __ _____ _____ _____
+//  __|  |   __|     |   | |  JSON for Modern C++
+// |  |  |__   |  |  | | | |  version 3.11.3
+// |_____|_____|_____|_|___|  https://github.com/nlohmann/json
+//
+// SPDX-FileCopyrightText: 2013-2023 Niels Lohmann <https://nlohmann.me>
+// SPDX-License-Identifier: MIT
+
+
+
+#include <utility>
+
 // #include <nlohmann/detail/abi_macros.hpp>
 //     __ _____ _____ _____
 //  __|  |   __|     |   | |  JSON for Modern C++
@@ -133,21 +146,6 @@
     }  // namespace nlohmann
 #endif
 
-// #include <nlohmann/adl_serializer.hpp>
-//     __ _____ _____ _____
-//  __|  |   __|     |   | |  JSON for Modern C++
-// |  |  |__   |  |  | | | |  version 3.11.3
-// |_____|_____|_____|_|___|  https://github.com/nlohmann/json
-//
-// SPDX-FileCopyrightText: 2013-2023 Niels Lohmann <https://nlohmann.me>
-// SPDX-License-Identifier: MIT
-
-
-
-#include <utility>
-
-// #include <nlohmann/detail/abi_macros.hpp>
-
 // #include <nlohmann/detail/conversions/from_json.hpp>
 //     __ _____ _____ _____
 //  __|  |   __|     |   | |  JSON for Modern C++
@@ -172,8 +170,6 @@
 #include <utility> // pair, declval
 #include <valarray> // valarray
 
-// #include <nlohmann/detail/abi_macros.hpp>
-
 // #include <nlohmann/detail/exceptions.hpp>
 //     __ _____ _____ _____
 //  __|  |   __|     |   | |  JSON for Modern C++
@@ -194,8 +190,6 @@
 #include <string> // to_string
 #include <vector> // vector
 
-// #include <nlohmann/detail/abi_macros.hpp>
-
 // #include <nlohmann/detail/value_t.hpp>
 //     __ _____ _____ _____
 //  __|  |   __|     |   | |  JSON for Modern C++
@@ -211,8 +205,6 @@
 #include <cstddef> // size_t
 #include <cstdint> // uint8_t
 #include <string> // string
-
-// #include <nlohmann/detail/abi_macros.hpp>
 
 // #include <nlohmann/detail/macro_scope.hpp>
 //     __ _____ _____ _____
@@ -2372,13 +2364,13 @@ JSON_HEDLEY_DIAGNOSTIC_POP
 #define JSON_HEDLEY_CLANG_HAS_WARNING(warning) JSON_HEDLEY_HAS_WARNING(warning)
 
 #endif /* !defined(JSON_HEDLEY_VERSION) || (JSON_HEDLEY_VERSION < X) */
-
+// IWYU pragma: export
 
 // This file contains all internal macro definitions (except those affecting ABI)
 // You MUST include macro_unscope.hpp at the end of json.hpp to undef all of them
 
 // #include <nlohmann/detail/abi_macros.hpp>
-
+// IWYU pragma: export
 
 // exclude unsupported compilers
 #if !defined(JSON_SKIP_UNSUPPORTED_COMPILER_CHECK)
@@ -3081,8 +3073,6 @@ NLOHMANN_JSON_NAMESPACE_END
 #include <type_traits> // conditional, enable_if, false_type, integral_constant, is_constructible, is_integral, is_same, remove_cv, remove_reference, true_type
 #include <utility> // index_sequence, make_index_sequence, index_sequence_for
 
-// #include <nlohmann/detail/abi_macros.hpp>
-
 // #include <nlohmann/detail/macro_scope.hpp>
 
 
@@ -3257,8 +3247,6 @@ NLOHMANN_JSON_NAMESPACE_END
 #include <tuple> // tuple
 #include <string> // char_traits
 
-// #include <nlohmann/detail/abi_macros.hpp>
-
 // #include <nlohmann/detail/iterators/iterator_traits.hpp>
 //     __ _____ _____ _____
 //  __|  |   __|     |   | |  JSON for Modern C++
@@ -3338,8 +3326,6 @@ NLOHMANN_JSON_NAMESPACE_END
 
 
 
-// #include <nlohmann/detail/abi_macros.hpp>
-
 // #include <nlohmann/detail/macro_scope.hpp>
 
 
@@ -3359,8 +3345,6 @@ NLOHMANN_JSON_NAMESPACE_END
 // SPDX-License-Identifier: MIT
 
 
-
-// #include <nlohmann/detail/abi_macros.hpp>
 
 // #include <nlohmann/detail/macro_scope.hpp>
 
@@ -4649,8 +4633,6 @@ NLOHMANN_JSON_NAMESPACE_END
 
 
 
-// #include <nlohmann/detail/abi_macros.hpp>
-
 // #include <nlohmann/detail/macro_scope.hpp>
 
 
@@ -4677,8 +4659,6 @@ NLOHMANN_JSON_NAMESPACE_END
 // #include <nlohmann/detail/string_concat.hpp>
 
 // #include <nlohmann/detail/value_t.hpp>
-
-// #include <nlohmann/thirdparty/hedley/hedley.hpp>
 
 
 NLOHMANN_JSON_NAMESPACE_BEGIN
@@ -5169,8 +5149,6 @@ NLOHMANN_JSON_NAMESPACE_END
 #include <valarray> // valarray
 #include <vector> // vector
 
-// #include <nlohmann/detail/abi_macros.hpp>
-
 // #include <nlohmann/detail/iterators/iteration_proxy.hpp>
 //     __ _____ _____ _____
 //  __|  |   __|     |   | |  JSON for Modern C++
@@ -5191,8 +5169,6 @@ NLOHMANN_JSON_NAMESPACE_END
 #if JSON_HAS_RANGES
     #include <ranges> // enable_borrowed_range
 #endif
-
-// #include <nlohmann/detail/abi_macros.hpp>
 
 // #include <nlohmann/detail/macro_scope.hpp>
 
@@ -6022,8 +5998,6 @@ NLOHMANN_JSON_NAMESPACE_END
 #include <cstddef> // size_t
 #include <functional> // hash
 
-// #include <nlohmann/detail/abi_macros.hpp>
-
 // #include <nlohmann/detail/macro_scope.hpp>
 
 // #include <nlohmann/detail/value_t.hpp>
@@ -6166,8 +6140,6 @@ NLOHMANN_JSON_NAMESPACE_END
 #include <utility> // make_pair, move
 #include <vector> // vector
 
-// #include <nlohmann/detail/abi_macros.hpp>
-
 // #include <nlohmann/detail/exceptions.hpp>
 
 // #include <nlohmann/detail/input/input_adapters.hpp>
@@ -6195,8 +6167,6 @@ NLOHMANN_JSON_NAMESPACE_END
     #include <cstdio>   // FILE *
     #include <istream>  // istream
 #endif                  // JSON_NO_IO
-
-// #include <nlohmann/detail/abi_macros.hpp>
 
 // #include <nlohmann/detail/iterators/iterator_traits.hpp>
 
@@ -6684,8 +6654,6 @@ NLOHMANN_JSON_NAMESPACE_END
 #include <string> // string
 #include <utility> // move
 #include <vector> // vector
-
-// #include <nlohmann/detail/abi_macros.hpp>
 
 // #include <nlohmann/detail/exceptions.hpp>
 
@@ -7426,8 +7394,6 @@ NLOHMANN_JSON_NAMESPACE_END
 #include <utility> // move
 #include <vector> // vector
 
-// #include <nlohmann/detail/abi_macros.hpp>
-
 // #include <nlohmann/detail/input/input_adapters.hpp>
 
 // #include <nlohmann/detail/input/position_t.hpp>
@@ -7435,8 +7401,6 @@ NLOHMANN_JSON_NAMESPACE_END
 // #include <nlohmann/detail/macro_scope.hpp>
 
 // #include <nlohmann/detail/meta/type_traits.hpp>
-
-// #include <nlohmann/thirdparty/hedley/hedley.hpp>
 
 
 NLOHMANN_JSON_NAMESPACE_BEGIN
@@ -9219,8 +9183,6 @@ NLOHMANN_JSON_NAMESPACE_END
 // #include <nlohmann/detail/string_concat.hpp>
 
 // #include <nlohmann/detail/value_t.hpp>
-
-// #include <nlohmann/thirdparty/hedley/hedley.hpp>
 
 
 NLOHMANN_JSON_NAMESPACE_BEGIN
@@ -12222,8 +12184,6 @@ NLOHMANN_JSON_NAMESPACE_END
 #include <utility> // move
 #include <vector> // vector
 
-// #include <nlohmann/detail/abi_macros.hpp>
-
 // #include <nlohmann/detail/exceptions.hpp>
 
 // #include <nlohmann/detail/input/input_adapters.hpp>
@@ -12762,11 +12722,7 @@ NLOHMANN_JSON_NAMESPACE_END
 #include <cstddef> // ptrdiff_t
 #include <limits>  // numeric_limits
 
-// #include <nlohmann/detail/abi_macros.hpp>
-
 // #include <nlohmann/detail/macro_scope.hpp>
-
-// #include <nlohmann/thirdparty/hedley/hedley.hpp>
 
 
 NLOHMANN_JSON_NAMESPACE_BEGIN
@@ -12924,8 +12880,6 @@ NLOHMANN_JSON_NAMESPACE_END
 
 #include <iterator> // iterator, random_access_iterator_tag, bidirectional_iterator_tag, advance, next
 #include <type_traits> // conditional, is_const, remove_const
-
-// #include <nlohmann/detail/abi_macros.hpp>
 
 // #include <nlohmann/detail/exceptions.hpp>
 
@@ -13876,8 +13830,6 @@ NLOHMANN_JSON_NAMESPACE_END
 #include <utility> // move
 #include <vector> // vector
 
-// #include <nlohmann/detail/abi_macros.hpp>
-
 // #include <nlohmann/detail/exceptions.hpp>
 
 // #include <nlohmann/detail/macro_scope.hpp>
@@ -13887,8 +13839,6 @@ NLOHMANN_JSON_NAMESPACE_END
 // #include <nlohmann/detail/string_escape.hpp>
 
 // #include <nlohmann/detail/value_t.hpp>
-
-// #include <nlohmann/thirdparty/hedley/hedley.hpp>
 
 
 NLOHMANN_JSON_NAMESPACE_BEGIN
@@ -14966,8 +14916,6 @@ NLOHMANN_JSON_NAMESPACE_END
 #include <utility> // move
 #include <vector> // vector
 
-// #include <nlohmann/detail/abi_macros.hpp>
-
 // #include <nlohmann/detail/input/binary_reader.hpp>
 
 // #include <nlohmann/detail/macro_scope.hpp>
@@ -14994,8 +14942,6 @@ NLOHMANN_JSON_NAMESPACE_END
     #include <ios>      // streamsize
     #include <ostream>  // basic_ostream
 #endif  // JSON_NO_IO
-
-// #include <nlohmann/detail/abi_macros.hpp>
 
 // #include <nlohmann/detail/macro_scope.hpp>
 
@@ -16971,8 +16917,6 @@ NLOHMANN_JSON_NAMESPACE_END
 #include <type_traits> // is_same
 #include <utility> // move
 
-// #include <nlohmann/detail/abi_macros.hpp>
-
 // #include <nlohmann/detail/conversions/to_chars.hpp>
 //     __ _____ _____ _____
 //  __|  |   __|     |   | |  JSON for Modern C++
@@ -16992,11 +16936,7 @@ NLOHMANN_JSON_NAMESPACE_END
 #include <limits> // numeric_limits
 #include <type_traits> // conditional
 
-// #include <nlohmann/detail/abi_macros.hpp>
-
 // #include <nlohmann/detail/macro_scope.hpp>
-
-// #include <nlohmann/thirdparty/hedley/hedley.hpp>
 
 
 NLOHMANN_JSON_NAMESPACE_BEGIN
@@ -19093,8 +19033,6 @@ NLOHMANN_JSON_NAMESPACE_END
 #include <utility> // pair
 #include <vector> // vector
 
-// #include <nlohmann/detail/abi_macros.hpp>
-
 // #include <nlohmann/detail/macro_scope.hpp>
 
 // #include <nlohmann/detail/meta/type_traits.hpp>
@@ -19437,8 +19375,6 @@ private:
 };
 
 NLOHMANN_JSON_NAMESPACE_END
-
-// #include <nlohmann/thirdparty/hedley/hedley.hpp>
 
 
 #if defined(JSON_HAS_CPP_17)

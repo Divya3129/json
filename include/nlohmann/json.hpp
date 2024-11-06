@@ -4017,10 +4017,6 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
                             const bool allow_exceptions = true,
                             const bool ignore_comments = false)
     {
-        if(i == nullptr && allow_exceptions){
-            JSON_THROW(std::invalid_argument("cannot parse a null string")); // ???
-        }
-
         basic_json result;
         parser(detail::input_adapter(std::forward<InputType>(i)), cb, allow_exceptions, ignore_comments).parse(true, result);
         return result;

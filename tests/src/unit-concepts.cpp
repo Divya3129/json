@@ -8,7 +8,6 @@
 
 #include "doctest_compatibility.h"
 
-#include <iostream> // delete me when done.
 #include <nlohmann/json.hpp>
 using nlohmann::json;
 

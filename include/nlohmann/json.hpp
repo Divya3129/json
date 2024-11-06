@@ -4004,8 +4004,10 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     /////////////////////
     // deserialization //
     /////////////////////
+
     /// @name deserialization
     /// @{
+
     /// @brief deserialize from a compatible input
     /// @sa https://json.nlohmann.me/api/basic_json/parse/
     template<typename InputType>

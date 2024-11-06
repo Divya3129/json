@@ -8,6 +8,7 @@
 
 #include "doctest_compatibility.h"
 
+#include <iostream> // delete me when done.
 #include <nlohmann/json.hpp>
 using nlohmann::json;
 
@@ -20,7 +21,6 @@ TEST_CASE("concepts")
         // a, b: values of type X: json
 
         // TABLE 96 - Container Requirements
-
         // X::value_type must return T
         CHECK((std::is_same<json::value_type, json>::value));
 
@@ -147,4 +147,15 @@ TEST_CASE("concepts")
             }
         }
     }
+}
+
+// This probably shouldn't go here..... should be in some other test file, since this has nothing to do with concepts.
+TEST_CASE("jh-testing")
+{
+    SECTION("parsing a nullstring")
+    {
+        const char * string = nullptr;
+        CHECK_THROWS_AS(nlohmann::json::parse(string), std::exception);
+    }
+
 }

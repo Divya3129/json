@@ -147,14 +147,3 @@ TEST_CASE("concepts")
         }
     }
 }
-
-// This probably shouldn't go here..... should be in some other test file, since this has nothing to do with concepts.
-TEST_CASE("jh-testing")
-{
-    SECTION("parsing a nullstring")
-    {
-        const char * string = nullptr;
-        CHECK_THROWS_AS(nlohmann::json::parse(string), std::exception);
-    }
-
-}

@@ -12,7 +12,6 @@
 #include <cstddef> // size_t
 #include <cstring> // strlen
 #include <iterator> // begin, end, iterator_traits, random_access_iterator_tag, distance, next
-#include <memory> // shared_ptr, make_shared, addressof
 #include <numeric> // accumulate
 #include <string> // string, char_traits
 #include <type_traits> // enable_if, is_base_of, is_pointer, is_integral, remove_pointer
@@ -448,7 +447,7 @@ contiguous_bytes_input_adapter input_adapter(CharT b)
 {
     if(b == nullptr)
     {
-        JSON_THROW(std::invalid_argument("cannot parse a null string"));
+        JSON_THROW(parse_error::create(101, 0, "attempting to parse an empty input; check that your input string or stream contains the expected JSON", nullptr));
     }
     auto length = std::strlen(reinterpret_cast<const char*>(b));
     const auto* ptr = reinterpret_cast<const char*>(b);

@@ -18,7 +18,7 @@ concurrency:
 
 jobs:
 # macos-11 is deprecated
-#  xcode_1:
+#  macos-11:
 #    runs-on: macos-11
 #    strategy:
 #      matrix:
@@ -35,7 +35,7 @@ jobs:
 #      - name: Test
 #        run: cd build ; ctest -j 10 --output-on-failure
 
-  xcode_2:
+  macos-12:
     runs-on: macos-12 # https://github.com/actions/runner-images/blob/main/images/macos/macos-12-Readme.md
     strategy:
       matrix:
@@ -52,11 +52,11 @@ jobs:
       - name: Test
         run: cd build ; ctest -j 10 --output-on-failure
 
-  xcode_3:
+  macos-13:
     runs-on: macos-13 # https://github.com/actions/runner-images/blob/main/images/macos/macos-13-Readme.md
     strategy:
       matrix:
-        xcode: ['14.2', '14.2', '14.3', '14.3.1', '15.0.1', '15.1', '15.2']
+        xcode: [ '14.2', '14.3', '14.3.1', '15.0.1', '15.1', '15.2']
     env:
       DEVELOPER_DIR: /Applications/Xcode_${{ matrix.xcode }}.app/Contents/Developer
 
@@ -69,7 +69,7 @@ jobs:
       - name: Test
         run: cd build ; ctest -j 10 --output-on-failure
 
-  xcode_4:
+  macos-14:
     runs-on: macos-14 # https://github.com/actions/runner-images/blob/main/images/macos/macos-14-Readme.md
     strategy:
       matrix:
@@ -86,7 +86,7 @@ jobs:
       - name: Test
         run: cd build ; ctest -j 10 --output-on-failure
 
-  xcode_5:
+  macos-15:
     runs-on: macos-15 # https://github.com/actions/runner-images/blob/main/images/macos/macos-15-Readme.md
     strategy:
       matrix:

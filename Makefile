@@ -144,7 +144,7 @@ pvs_studio:
 
 # call the Artistic Style pretty printer on all source files
 pretty:
-	/Users/niels/Downloads/astyle \
+	astyle \
 	    --style=allman \
 	    --indent=spaces=4 \
 	    --indent-modifiers \

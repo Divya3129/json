@@ -10,6 +10,7 @@
 
 #include <algorithm> // transform
 #include <array> // array
+#include <cstddef> // nullptr_t
 #include <forward_list> // forward_list
 #include <iterator> // inserter, front_inserter, end
 #include <map> // map

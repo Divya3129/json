@@ -9,6 +9,7 @@
 #pragma once
 
 #include <algorithm> // copy
+#include <cstddef>  // size_t
 #include <iterator> // begin, end
 #include <string> // string
 #include <tuple> // tuple, get

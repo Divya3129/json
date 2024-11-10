@@ -17001,7 +17001,7 @@ struct diyfp // f * 2^e
     @brief returns x - y
     @pre x.e == y.e and x.f >= y.f
     */
-    static diyfp sub(const diyfp& x, const diyfp& y) noexcept
+    static diyfp sub(diyfp x, diyfp y) noexcept
     {
         JSON_ASSERT(x.e == y.e);
         JSON_ASSERT(x.f >= y.f);
@@ -17013,7 +17013,7 @@ struct diyfp // f * 2^e
     @brief returns x * y
     @note The result is rounded. (Only the upper q bits are returned.)
     */
-    static diyfp mul(const diyfp& x, const diyfp& y) noexcept
+    static diyfp mul(diyfp x, diyfp y) noexcept
     {
         static_assert(kPrecision == 64, "internal error");
 
@@ -17095,7 +17095,7 @@ struct diyfp // f * 2^e
     @brief normalize x such that the result has the exponent E
     @pre e >= x.e and the upper e - x.e bits of x.f must be zero.
     */
-    static diyfp normalize_to(const diyfp& x, const int target_exponent) noexcept
+    static diyfp normalize_to(diyfp x, const int target_exponent) noexcept
     {
         const int delta = x.e - target_exponent;
 
@@ -19460,7 +19460,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     template<typename InputAdapterType>
     static ::nlohmann::detail::parser<basic_json, InputAdapterType> parser(
         InputAdapterType adapter,
-        detail::parser_callback_t<basic_json>cb = nullptr,
+        detail::parser_callback_t<basic_json> cb = nullptr,
         const bool allow_exceptions = true,
         const bool ignore_comments = false
                                  )
@@ -20541,12 +20541,9 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     /// @brief move constructor
     /// @sa https://json.nlohmann.me/api/basic_json/basic_json/
     basic_json(basic_json&& other) noexcept
-        : json_base_class_t(std::forward<json_base_class_t>(other)),
-          m_data(std::move(other.m_data))
+        : m_data((other.assert_invariant(false), std::move(other.m_data)))
+        , json_base_class_t(std::forward<json_base_class_t>(other))
     {
-        // check that passed value is valid
-        other.assert_invariant(false);
-
         // invalidate payload
         other.m_data.m_type = value_t::null;
         other.m_data.m_value = {};

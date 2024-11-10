@@ -131,7 +131,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     template<typename InputAdapterType>
     static ::nlohmann::detail::parser<basic_json, InputAdapterType> parser(
         InputAdapterType adapter,
-        detail::parser_callback_t<basic_json>cb = nullptr,
+        detail::parser_callback_t<basic_json> cb = nullptr,
         const bool allow_exceptions = true,
         const bool ignore_comments = false
     )
@@ -1212,12 +1212,9 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     /// @brief move constructor
     /// @sa https://json.nlohmann.me/api/basic_json/basic_json/
     basic_json(basic_json&& other) noexcept
-        : json_base_class_t(std::forward<json_base_class_t>(other)),
-          m_data(std::move(other.m_data))
+        : m_data((other.assert_invariant(false), std::move(other.m_data)))
+        , json_base_class_t(std::forward<json_base_class_t>(other))
     {
-        // check that passed value is valid
-        other.assert_invariant(false);
-
         // invalidate payload
         other.m_data.m_type = value_t::null;
         other.m_data.m_value = {};

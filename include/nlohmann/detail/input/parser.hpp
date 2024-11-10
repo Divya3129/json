@@ -69,7 +69,7 @@ class parser
   public:
     /// a parser reading from an input adapter
     explicit parser(InputAdapterType&& adapter,
-                    const parser_callback_t<BasicJsonType> cb = nullptr,
+                    const parser_callback_t<BasicJsonType>& cb = nullptr,
                     const bool allow_exceptions_ = true,
                     const bool skip_comments = false)
         : callback(cb)

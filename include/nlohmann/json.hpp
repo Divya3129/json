@@ -131,7 +131,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     template<typename InputAdapterType>
     static ::nlohmann::detail::parser<basic_json, InputAdapterType> parser(
         InputAdapterType adapter,
-        detail::parser_callback_t<basic_json>cb = nullptr,
+        detail::parser_callback_t<basic_json>& cb = nullptr,
         const bool allow_exceptions = true,
         const bool ignore_comments = false
     )
@@ -1029,7 +1029,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     template < class InputIT, typename std::enable_if <
                    std::is_same<InputIT, typename basic_json_t::iterator>::value ||
                    std::is_same<InputIT, typename basic_json_t::const_iterator>::value, int >::type = 0 >
-    basic_json(InputIT first, InputIT last)
+    basic_json(InputIT first, InputIT last) // NOLINT(performance-unnecessary-value-param)
     {
         JSON_ASSERT(first.m_object != nullptr);
         JSON_ASSERT(last.m_object != nullptr);
@@ -1212,15 +1212,13 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     /// @brief move constructor
     /// @sa https://json.nlohmann.me/api/basic_json/basic_json/
     basic_json(basic_json&& other) noexcept
-        : json_base_class_t(std::forward<json_base_class_t>(other)),
-          m_data(std::move(other.m_data))
+    // check that passed value is valid (has to be done before forwarding)
+        : json_base_class_t((other.assert_invariant(false), std::forward<json_base_class_t>(other))),
+          m_data(std::move(other.m_data))// NOLINT(bugprone-use-after-move,hicpp-invalid-access-moved)
     {
-        // check that passed value is valid
-        other.assert_invariant(false);
-
         // invalidate payload
-        other.m_data.m_type = value_t::null;
-        other.m_data.m_value = {};
+        other.m_data.m_type = value_t::null; // NOLINT(bugprone-use-after-move,hicpp-invalid-access-moved)
+        other.m_data.m_value = {};// NOLINT(bugprone-use-after-move,hicpp-invalid-access-moved)
 
         set_parents();
         assert_invariant();
@@ -2012,7 +2010,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         auto it = m_data.m_value.object->find(std::forward<KeyType>(key));
         if (it == m_data.m_value.object->end())
         {
-            JSON_THROW(out_of_range::create(403, detail::concat("key '", string_t(std::forward<KeyType>(key)), "' not found"), this));
+            JSON_THROW(out_of_range::create(403, "key not found (key is an rvalue and cannot be shown)", this));
         }
         return set_parent(it->second);
     }
@@ -2050,7 +2048,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
         auto it = m_data.m_value.object->find(std::forward<KeyType>(key));
         if (it == m_data.m_value.object->end())
         {
-            JSON_THROW(out_of_range::create(403, detail::concat("key '", string_t(std::forward<KeyType>(key)), "' not found"), this));
+            JSON_THROW(out_of_range::create(403, "key not found (key is an rvalue and cannot be shown)", this));
         }
         return it->second;
     }
@@ -2426,7 +2424,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     template < class IteratorType, detail::enable_if_t <
                    std::is_same<IteratorType, typename basic_json_t::iterator>::value ||
                    std::is_same<IteratorType, typename basic_json_t::const_iterator>::value, int > = 0 >
-    IteratorType erase(IteratorType pos)
+    IteratorType erase(IteratorType pos) // NOLINT(performance-unnecessary-value-param)
     {
         // make sure iterator fits the current value
         if (JSON_HEDLEY_UNLIKELY(this != pos.m_object))
@@ -4013,7 +4011,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     template<typename InputType>
     JSON_HEDLEY_WARN_UNUSED_RESULT
     static basic_json parse(InputType&& i,
-                            const parser_callback_t cb = nullptr,
+                            const parser_callback_t& cb = nullptr,
                             const bool allow_exceptions = true,
                             const bool ignore_comments = false)
     {
@@ -4028,7 +4026,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     JSON_HEDLEY_WARN_UNUSED_RESULT
     static basic_json parse(IteratorType first,
                             IteratorType last,
-                            const parser_callback_t cb = nullptr,
+                            const parser_callback_t& cb = nullptr,
                             const bool allow_exceptions = true,
                             const bool ignore_comments = false)
     {

@@ -355,7 +355,7 @@ class json_sax_dom_callback_parser
     json_sax_dom_callback_parser(BasicJsonType& r,
                                  const parser_callback_t cb,
                                  const bool allow_exceptions_ = true)
-        : root(r), callback(cb), allow_exceptions(allow_exceptions_)
+        : root(r), callback(std::move(cb)), allow_exceptions(allow_exceptions_)
     {
         keep_stack.push_back(true);
     }

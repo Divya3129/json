@@ -161,6 +161,7 @@
     #define JSON_NO_UNIQUE_ADDRESS [[no_unique_address]]
 #else
     #define JSON_NO_UNIQUE_ADDRESS
+#endif
 
 // disable documentation warnings on clang
 #if defined(__clang__)

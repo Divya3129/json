@@ -2503,6 +2503,7 @@ JSON_HEDLEY_DIAGNOSTIC_POP
     #define JSON_NO_UNIQUE_ADDRESS [[no_unique_address]]
 #else
     #define JSON_NO_UNIQUE_ADDRESS
+#endif
 
 #ifdef JSON_HAS_CPP_17
     #include <optional>

@@ -162,12 +162,16 @@
 #include <forward_list> // forward_list
 #include <iterator> // inserter, front_inserter, end
 #include <map> // map
+#ifdef JSON_HAS_CPP_17
+    #include <optional> // optional
+#endif
 #include <string> // string
 #include <tuple> // tuple, make_tuple
 #include <type_traits> // is_arithmetic, is_same, is_enum, underlying_type, is_convertible
 #include <unordered_map> // unordered_map
 #include <utility> // pair, declval
 #include <valarray> // valarray
+
 
 // #include <nlohmann/detail/exceptions.hpp>
 //     __ _____ _____ _____
@@ -2503,10 +2507,6 @@ JSON_HEDLEY_DIAGNOSTIC_POP
     #define JSON_NO_UNIQUE_ADDRESS [[no_unique_address]]
 #else
     #define JSON_NO_UNIQUE_ADDRESS
-#endif
-
-#ifdef JSON_HAS_CPP_17
-    #include <optional>
 #endif
 
 // disable documentation warnings on clang
@@ -5184,6 +5184,9 @@ NLOHMANN_JSON_NAMESPACE_END
 
 #include <algorithm> // copy
 #include <iterator> // begin, end
+#ifdef JSON_HAS_CPP_17
+    #include <optional> // optional
+#endif
 #include <string> // string
 #include <tuple> // tuple, get
 #include <type_traits> // is_same, is_constructible, is_floating_point, is_enum, underlying_type

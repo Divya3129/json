@@ -10,6 +10,9 @@
 
 #include <algorithm> // copy
 #include <iterator> // begin, end
+#ifdef JSON_HAS_CPP_17
+    #include <optional> // optional
+#endif
 #include <string> // string
 #include <tuple> // tuple, get
 #include <type_traits> // is_same, is_constructible, is_floating_point, is_enum, underlying_type

@@ -363,7 +363,8 @@ TEST_CASE("deserialization")
             }));
 
             const char* string = nullptr;
-            CHECK_THROWS_WITH_AS(nlohmann::json::parse(string), "[json.exception.parse_error.101] parse error: attempting to parse an empty input; check that your input string or stream contains the expected JSON", json::parse_error&);
+            json _;
+            CHECK_THROWS_WITH_AS(_ = json::parse(string), "[json.exception.parse_error.101] parse error: attempting to parse an empty input; check that your input string or stream contains the expected JSON", json::parse_error&);
             CHECK_THROWS_WITH_AS(nlohmann::detail::input_adapter(nullptr), "[json.exception.parse_error.101] parse error: attempting to parse an empty input; check that your input string or stream contains the expected JSON", json::parse_error&);
         }
 

@@ -362,7 +362,7 @@ TEST_CASE("deserialization")
                 "end_object()", "parse_error(29)"
             }));
 
-            const char * string = nullptr;
+            const char* string = nullptr;
             CHECK_THROWS_WITH_AS(nlohmann::json::parse(string), "[json.exception.parse_error.101] parse error: attempting to parse an empty input; check that your input string or stream contains the expected JSON", json::parse_error&);
         }
 

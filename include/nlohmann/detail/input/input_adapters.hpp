@@ -422,7 +422,7 @@ inline file_input_adapter input_adapter(std::FILE* file)
 {
     if (file == nullptr)
     {
-        JSON_THROW(parse_error::create(101, 0, "attempting to parse an empty/null input; check that your input string or stream contains the expected JSON", nullptr));
+        JSON_THROW(parse_error::create(101, 0, "attempting to parse an empty input; check that your input string or stream contains the expected JSON", nullptr));
     }
     return file_input_adapter(file);
 }

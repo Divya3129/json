@@ -6227,6 +6227,10 @@ NLOHMANN_JSON_NAMESPACE_END
 #include <string> // string, char_traits
 #include <type_traits> // enable_if, is_base_of, is_pointer, is_integral, remove_pointer
 #include <utility> // pair, declval
+// #include <nlohmann/detail/exceptions.hpp>
+
+// #include <nlohmann/detail/macro_scope.hpp>
+
 
 #ifndef JSON_NO_IO
     #include <cstdio>   // FILE *

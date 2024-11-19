@@ -6229,8 +6229,6 @@ NLOHMANN_JSON_NAMESPACE_END
 #include <utility> // pair, declval
 // #include <nlohmann/detail/exceptions.hpp>
 
-// #include <nlohmann/detail/macro_scope.hpp>
-
 
 #ifndef JSON_NO_IO
     #include <cstdio>   // FILE *

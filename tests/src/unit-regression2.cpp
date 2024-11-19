@@ -249,11 +249,33 @@ struct for_3171_derived : public for_3171_base
 {
     for_3171_derived() = default;
     ~for_3171_derived() override;
-    for_3171_derived(for_3171_derived&&) noexcept = default;
-    for_3171_derived(const for_3171_derived&) = default;
-    for_3171_derived& operator=(const for_3171_derived&) = default;
-    for_3171_derived& operator=(for_3171_derived&&) = default;
     explicit for_3171_derived(const std::string& /*unused*/) { }
+
+    for_3171_derived(const for_3171_derived& other)
+        : for_3171_base(other)
+    {}
+
+    for_3171_derived& operator=(const for_3171_derived& other)
+    {
+        if (this != &other)
+        {
+            for_3171_base::operator=(other); // Call base class assignment operator
+        }
+        return *this;
+    }
+
+    for_3171_derived(for_3171_derived&& other) noexcept
+        : for_3171_base(std::move(other))
+    {}
+
+    for_3171_derived& operator=(for_3171_derived&& other) noexcept
+    {
+        if (this != &other)
+        {
+            for_3171_base::operator=(std::move(other)); // Call base class move assignment operator
+        }
+        return *this;
+    }
 };
 
 for_3171_derived::~for_3171_derived() = default;

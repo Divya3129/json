@@ -249,6 +249,10 @@ struct for_3171_derived : public for_3171_base
 {
     for_3171_derived() = default;
     ~for_3171_derived() override;
+    for_3171_derived(for_3171_derived&&) noexcept = default;
+    for_3171_derived(const for_3171_derived&) = default;
+    for_3171_derived& operator=(const for_3171_derived&) = default;
+    for_3171_derived& operator=(for_3171_derived&&) = default;
     explicit for_3171_derived(const std::string& /*unused*/) { }
 };
 

@@ -6233,9 +6233,9 @@ NLOHMANN_JSON_NAMESPACE_END
     #include <istream>  // istream
 #endif                  // JSON_NO_IO
 
-// #include <nlohmann/detail/iterators/iterator_traits.hpp>
-
 // #include <nlohmann/detail/exceptions.hpp>
+
+// #include <nlohmann/detail/iterators/iterator_traits.hpp>
 
 // #include <nlohmann/detail/macro_scope.hpp>
 

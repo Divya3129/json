@@ -17,7 +17,6 @@
 #include <string> // string, char_traits
 #include <type_traits> // enable_if, is_base_of, is_pointer, is_integral, remove_pointer
 #include <utility> // pair, declval
-#include <nlohmann/detail/exceptions.hpp>
 
 #ifndef JSON_NO_IO
     #include <cstdio>   // FILE *
@@ -25,6 +24,7 @@
 #endif                  // JSON_NO_IO
 
 #include <nlohmann/detail/iterators/iterator_traits.hpp>
+#include <nlohmann/detail/exceptions.hpp>
 #include <nlohmann/detail/macro_scope.hpp>
 #include <nlohmann/detail/meta/type_traits.hpp>
 

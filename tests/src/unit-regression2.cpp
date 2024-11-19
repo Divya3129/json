@@ -235,6 +235,32 @@ struct for_3171_base // NOLINT(cppcoreguidelines-special-member-functions)
     for_3171_base(const std::string& /*unused*/ = {}) {}
     virtual ~for_3171_base();
 
+    for_3171_base(const for_3171_base& other) // NOLINT(hicpp-use-equals-default,modernize-use-equals-default)
+        : str(other.str)
+    {}
+
+    for_3171_base& operator=(const for_3171_base& other)
+    {
+        if (this != &other)
+        {
+            str = other.str;
+        }
+        return *this;
+    }
+
+    for_3171_base(for_3171_base&& other) noexcept
+        : str(std::move(other.str))
+    {}
+
+    for_3171_base& operator=(for_3171_base&& other) noexcept
+    {
+        if (this != &other)
+        {
+            str = std::move(other.str);
+        }
+        return *this;
+    }
+
     virtual void _from_json(const json& j)
     {
         j.at("str").get_to(str);
@@ -251,7 +277,7 @@ struct for_3171_derived : public for_3171_base
     ~for_3171_derived() override;
     explicit for_3171_derived(const std::string& /*unused*/) { }
 
-    for_3171_derived(const for_3171_derived& other)
+    for_3171_derived(const for_3171_derived& other) // NOLINT(hicpp-use-equals-default,modernize-use-equals-default)
         : for_3171_base(other)
     {}
 

@@ -12,7 +12,7 @@
 #include <locale>
 
 // skip tests if JSON_DisableEnumSerialization=ON (#4384)
-#if JSON_DISABLE_ENUM_SERIALIZATION == 1
+#if defined(JSON_DISABLE_ENUM_SERIALIZATION) && (JSON_DISABLE_ENUM_SERIALIZATION == 1)
     #define SKIP_TESTS_FOR_ENUM_SERIALIZATION
 #endif
 

@@ -104,7 +104,7 @@ jobs:
 
   ci_test_coverage:
     runs-on: ubuntu-latest
-    container: ghcr.io/nlohmann/json-ci:v2.4.0
+    container: gcc:latest
     permissions:
       contents: read
       checks: write

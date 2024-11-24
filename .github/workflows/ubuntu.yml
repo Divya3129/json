@@ -109,8 +109,13 @@ jobs:
       checks: write
     steps:
       - uses: actions/checkout@v4
-      - name: Install de_DE locale
-        run: apt-get clean ; apt-get update ; apt-get install -y build-essential cmake lcov ninja-build make locales ; locale-gen de_DE ; update-locale
+      - name: Install dependencies and de_DE locale
+        run: |
+          sudo apt-get clean
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake lcov ninja-build make locales
+          sudo locale-gen de_DE
+          sudo update-locale
       - name: Run CMake
         run: cmake -S . -B build -DJSON_CI=On
       - name: Build

@@ -104,14 +104,13 @@ jobs:
 
   ci_test_coverage:
     runs-on: ubuntu-latest
-    container: gcc:latest
     permissions:
       contents: read
       checks: write
     steps:
       - uses: actions/checkout@v4
       - name: Install de_DE locale
-        run: locale-gen de_DE ; update-locale
+        run: apt-get clean ; apt-get update ; apt-get install -y build-essential cmake lcov ninja-build make locales ; locale-gen de_DE ; update-locale
       - name: Run CMake
         run: cmake -S . -B build -DJSON_CI=On
       - name: Build

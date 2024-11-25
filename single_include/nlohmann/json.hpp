@@ -13493,19 +13493,17 @@ class iter_impl // NOLINT(cppcoreguidelines-special-member-functions,hicpp-speci
     */
     bool operator<(const iter_impl& other) const
     {
-        // value-initialized forward iterators can be compared, and must compare equal to other value-initialized iterators of the same type #4493
-        if (m_object == nullptr && other.m_object == nullptr)
-        {
-            return false;
-        }
-
         // if objects are not the same, the comparison is undefined
         if (JSON_HEDLEY_UNLIKELY(m_object != other.m_object))
         {
             JSON_THROW(invalid_iterator::create(212, "cannot compare iterators of different containers", m_object));
         }
 
-        JSON_ASSERT(m_object != nullptr);
+        // value-initialized forward iterators can be compared, and must compare equal to other value-initialized iterators of the same type #4493
+        if (m_object == nullptr)
+        {
+            return false;
+        }
 
         switch (m_object->m_data.m_type)
         {

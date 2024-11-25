@@ -13502,6 +13502,7 @@ class iter_impl // NOLINT(cppcoreguidelines-special-member-functions,hicpp-speci
         // value-initialized forward iterators can be compared, and must compare equal to other value-initialized iterators of the same type #4493
         if (m_object == nullptr)
         {
+            // the iterators are both value-initialized and are to be considered equal, but this function checks for smaller, so we return false
             return false;
         }
 

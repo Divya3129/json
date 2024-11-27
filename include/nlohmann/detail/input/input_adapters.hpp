@@ -180,12 +180,12 @@ class iterator_input_adapter
     template<class T>
     std::size_t get_elements(T* dest, std::size_t count = 1)
     {
-        auto* ptr = reinterpret_cast<unsigned char*>(dest);
+        auto* ptr = reinterpret_cast<char*>(dest);
         for (std::size_t read_index = 0; read_index < count * sizeof(T); ++read_index)
         {
             if (JSON_HEDLEY_LIKELY(current != end))
             {
-                ptr[read_index] = *current;
+                ptr[read_index] = static_cast<char>(*current);
                 std::advance(current, 1);
             }
             else
@@ -359,15 +359,11 @@ class wide_string_input_adapter
         return utf8_bytes[utf8_bytes_index++];
     }
 
+    // parsing binary with wchar doesn't make sense, but since the parsing mode can be runtime, we need something here
     template<class T>
-    std::size_t get_elements(T* dest, std::size_t count = 1)
+    std::size_t get_elements(T* /*dest*/, std::size_t /*count*/ = 1)
     {
-        auto* ptr = reinterpret_cast<char*>(dest);
-        for (std::size_t read_index = 0; read_index < count * sizeof(T); ++read_index)
-        {
-            ptr[read_index] = static_cast<char>(get_character());
-        }
-        return count * sizeof(T);
+        JSON_THROW(parse_error::create(112, 1, "wide string type cannot be interpreted as binary data", nullptr));
     }
 
   private:

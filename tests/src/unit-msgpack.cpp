@@ -1508,6 +1508,14 @@ TEST_CASE("MessagePack")
             CHECK(json::from_msgpack(std::vector<uint8_t>({0xc4}), true, false).is_discarded());
         }
 
+        SECTION("unexpected end inside int with stream")
+        {
+            json _;
+            std::string data = {static_cast<char>(0xd2), static_cast<char>(0x12), static_cast<char>(0x34), static_cast<char>(0x56)};
+            CHECK_THROWS_WITH_AS(_ = json::from_msgpack(std::istringstream(data, std::ios::binary)),
+                                 "[json.exception.parse_error.110] parse error at byte 5: syntax error while parsing MessagePack number: unexpected end of input", json::parse_error&);
+        }
+
         SECTION("unsupported bytes")
         {
             SECTION("concrete examples")

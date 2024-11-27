@@ -2808,7 +2808,7 @@ class binary_reader
         swap_t& number_ref = reinterpret_cast<swap_t&>(number);
         number_ref = std::byteswap(number_ref);
 #else
-        auto ptr = reinterpret_cast<std::uint8_t*>(&number);
+        auto* ptr = reinterpret_cast<std::uint8_t*>(&number);
         for (std::size_t i = 0; i < sz / 2; ++i)
         {
             std::swap(ptr[i], ptr[sz - i - 1]);

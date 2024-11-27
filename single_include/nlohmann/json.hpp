@@ -6370,12 +6370,12 @@ class input_stream_adapter
     template<class T>
     std::size_t get_elements(T* dest, std::size_t count = 1)
     {
-        auto res = sb->sgetn(reinterpret_cast<char*>(dest), static_cast<std::streamsize>(count * sizeof(T)));
+        auto res = static_cast<std::size_t>(sb->sgetn(reinterpret_cast<char*>(dest), static_cast<std::streamsize>(count * sizeof(T))));
         if (JSON_HEDLEY_UNLIKELY(res < count * sizeof(T)))
         {
             is->clear(is->rdstate() | std::ios::eofbit);
         }
-        return static_cast<std::size_t>(res);
+        return res;
     }
 
   private:
@@ -6413,7 +6413,7 @@ class iterator_input_adapter
     template<class T>
     std::size_t get_elements(T* dest, std::size_t count = 1)
     {
-        auto ptr = reinterpret_cast<char*>(dest);
+        auto* ptr = reinterpret_cast<unsigned char*>(dest);
         for (std::size_t read_index = 0; read_index < count * sizeof(T); ++read_index)
         {
             if (JSON_HEDLEY_LIKELY(current != end))
@@ -6595,7 +6595,7 @@ class wide_string_input_adapter
     template<class T>
     std::size_t get_elements(T* dest, std::size_t count = 1)
     {
-        auto ptr = reinterpret_cast<char*>(dest);
+        auto* ptr = reinterpret_cast<char*>(dest);
         for (std::size_t read_index = 0; read_index < count * sizeof(T); ++read_index)
         {
             ptr[read_index] = static_cast<char>(get_character());
@@ -12110,7 +12110,7 @@ class binary_reader
         swap_t& number_ref = reinterpret_cast<swap_t&>(number);
         number_ref = std::byteswap(number_ref);
 #else
-        auto ptr = reinterpret_cast<std::uint8_t*>(&number);
+        auto* ptr = reinterpret_cast<std::uint8_t*>(&number);
         for (std::size_t i = 0; i < sz / 2; ++i)
         {
             std::swap(ptr[i], ptr[sz - i - 1]);

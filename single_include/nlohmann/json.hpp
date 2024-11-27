@@ -12101,17 +12101,17 @@ class binary_reader
         {
             return;
         }
-        // convert float types to int types of the same size
-        using swap_t = std::conditional<sz == 2, std::uint16_t, typename std::conditional<sz == 4, std::uint32_t, std::uint64_t>::type>::type;
-        swap_t& number_ref = reinterpret_cast<swap_t&>(number);
-        number_ref = std::byteswap(number_ref);
-#else
+        if constexpr(std::is_integral_v<NumberType>)
+        {
+            number = std::byteswap(number);
+            return;
+        }
+#endif
         auto* ptr = reinterpret_cast<std::uint8_t*>(&number);
         for (std::size_t i = 0; i < sz / 2; ++i)
         {
             std::swap(ptr[i], ptr[sz - i - 1]);
         }
-#endif
     }
 
     /*

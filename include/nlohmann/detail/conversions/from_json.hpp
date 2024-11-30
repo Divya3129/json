@@ -378,12 +378,8 @@ inline void from_json(const BasicJsonType& j, ArithmeticType& val)
             val = static_cast<ArithmeticType>(*j.template get_ptr<const typename BasicJsonType::number_float_t*>());
             break;
         }
-        case value_t::boolean:
-        {
-            val = static_cast<ArithmeticType>(*j.template get_ptr<const typename BasicJsonType::boolean_t*>());
-            break;
-        }
 
+        case value_t::boolean:
         case value_t::null:
         case value_t::object:
         case value_t::array:

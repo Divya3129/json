@@ -96,7 +96,6 @@ file(GLOB_RECURSE SRC_FILES ${PROJECT_SOURCE_DIR}/include/nlohmann/*.hpp)
 # -Wno-padded                     We do not care about padding warnings.
 # -Wno-covered-switch-default     All switches list all cases and a default case.
 # -Wno-unsafe-buffer-usage        Otherwise Doctest would not compile.
-# -Wreserved-identifier           See https://github.com/onqtam/doctest/issues/536.
 
 set(CLANG_CXXFLAGS
     -Werror
@@ -108,15 +107,15 @@ set(CLANG_CXXFLAGS
     -Wno-padded
     -Wno-covered-switch-default
     -Wno-unsafe-buffer-usage
-    -Wno-reserved-identifier
 )
 
-# Warning flags determined for GCC 13.0 (experimental) with https://github.com/nlohmann/gcc_flags:
+# Warning flags determined for GCC 14.2.0 with https://github.com/nlohmann/gcc_flags:
 # Ignored GCC warnings:
 # -Wno-abi-tag                    We do not care about ABI tags.
 # -Wno-aggregate-return           The library uses aggregate returns.
 # -Wno-long-long                  The library uses the long long type to interface with system functions.
 # -Wno-namespaces                 The library uses namespaces.
+# -Wno-nrvo                       Doctest triggers this warning.
 # -Wno-padded                     We do not care about padding warnings.
 # -Wno-system-headers             We do not care about warnings in system headers.
 # -Wno-templates                  The library uses templates.
@@ -390,7 +389,7 @@ set(GCC_CXXFLAGS
     -Wstack-protector
     -Wstrict-aliasing=3
     -Wstrict-null-sentinel
-    -Wno-strict-overflow
+    -Wstrict-overflow
     -Wstring-compare
     -Wstringop-overflow=4
     -Wstringop-overread

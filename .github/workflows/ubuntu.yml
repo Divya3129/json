@@ -48,7 +48,13 @@ jobs:
     container: ghcr.io/nlohmann/json-ci:v2.4.0
     strategy:
       matrix:
-        target: [ci_cppcheck, ci_test_valgrind, ci_test_amalgamation, ci_infer]
+        target: [
+          ci_cppcheck,          # needs cppcheck
+          ci_test_valgrind,     # needs Valgrind
+          ci_test_amalgamation, # needs AStyle
+          ci_infer,             # needs Infer
+          ci_single_binaries    # needs iwyu
+        ]
     steps:
       - uses: actions/checkout@v4
       - name: Run CMake
@@ -72,7 +78,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        target: [ci_cpplint, ci_reproducible_tests, ci_non_git_tests, ci_offline_testdata, ci_single_binaries]
+        target: [ci_cpplint, ci_reproducible_tests, ci_non_git_tests, ci_offline_testdata]
     steps:
       - uses: actions/checkout@v4
       - name: Get latest CMake and ninja

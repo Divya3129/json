@@ -209,12 +209,14 @@ jobs:
 
   ci_test_standards_gcc:
     runs-on: ubuntu-latest
-    container: ghcr.io/nlohmann/json-ci:v2.4.0
+    container: gcc:latest
     strategy:
       matrix:
         standard: [11, 14, 17, 20, 23]
     steps:
       - uses: actions/checkout@v4
+      - name: Get latest CMake and ninja
+        uses: lukka/get-cmake@v3.31.0
       - name: Run CMake
         run: cmake -S . -B build -DJSON_CI=On
       - name: Build

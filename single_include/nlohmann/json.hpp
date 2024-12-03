@@ -4763,11 +4763,12 @@ void get_arithmetic_value(const BasicJsonType& j, ArithmeticType& val)
             break;
         }
 
+
+        case value_t::boolean:
         case value_t::null:
         case value_t::object:
         case value_t::array:
         case value_t::string:
-        case value_t::boolean:
         case value_t::binary:
         case value_t::discarded:
         default:
@@ -5053,15 +5054,11 @@ inline void from_json(const BasicJsonType& j, ArithmeticType& val)
         }
         case value_t::boolean:
         {
-            if ((sizeof(ArithmeticType) == 1) && std::is_unsigned<ArithmeticType>::value)
+            if (std::is_same<ArithmeticType, bool>::value || std::is_same<ArithmeticType, uint8_t>::value)
             {
                 val = static_cast<ArithmeticType>(*j.template get_ptr<const typename BasicJsonType::boolean_t*>());
+                break;
             }
-            else
-            {
-                get_arithmetic_value(j, val);
-            }
-            break;
         }
 
         case value_t::null:

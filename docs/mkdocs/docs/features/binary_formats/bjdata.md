@@ -139,6 +139,13 @@ The library uses the following mapping from JSON values types to BJData types ac
     in optimized arrays to designate binary data. This means that, unlike UBJSON, binary data can be both serialized and
     deserialized.
 
+    To preserve compatibility with BJData Draft 2, the Draft 3 optimized binary array must be explicitly enabled using
+    the `draft3_binary` parameter of [`to_bjdata`](../../api/basic_json/to_bjdata.md).
+
+    In Draft2 mode (default), if the JSON data contains the binary type, the value stored is a list of integers, as
+    suggested by the BJData documentation. In particular, this means that the serialization and the deserialization of
+    JSON containing binary values into BJData and back will result in a different JSON object.
+
     [BJDataBinArr]: https://github.com/NeuroJSON/bjdata/blob/master/Binary_JData_Specification.md#optimized-binary-array)
 
 ??? example

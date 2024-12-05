@@ -4,13 +4,16 @@
 // (1)
 static std::vector<std::uint8_t> to_bjdata(const basic_json& j,
                                            const bool use_size = false,
-                                           const bool use_type = false);
+                                           const bool use_type = false,
+                                           const bool draft3_binary = false);
 
 // (2)
 static void to_bjdata(const basic_json& j, detail::output_adapter<std::uint8_t> o,
-                      const bool use_size = false, const bool use_type = false);
+                      const bool use_size = false, const bool use_type = false,
+                      const bool draft3_binary = false);
 static void to_bjdata(const basic_json& j, detail::output_adapter<char> o,
-                      const bool use_size = false, const bool use_type = false);
+                      const bool use_size = false, const bool use_type = false,
+                      const bool draft3_binary = false);
 ```
 
 Serializes a given JSON value `j` to a byte vector using the BJData (Binary JData) serialization format. BJData aims to
@@ -34,6 +37,9 @@ The exact mapping and its limitations is described on a [dedicated page](../../f
 
 `use_type` (in)
 :   whether to add type annotations to container types (must be combined with `#!cpp use_size = true`); optional,
+
+`draft3_binary` (in)
+:   whether to use the draft 3 binary format (see [draft 3](../../features/binary_formats/bjdata.md#draft-3-binary-format)); optional,
 `#!cpp false` by default.
 
 ## Return value

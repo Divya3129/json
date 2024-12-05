@@ -735,10 +735,11 @@ class binary_writer
     @param[in] use_type    whether to use '$' prefixes (optimized format)
     @param[in] add_prefix  whether prefixes need to be used for this value
     @param[in] use_bjdata  whether write in BJData format, default is false
+    @param[in] bjdata_draft3_binary  whether to use BJData draft-3 binary format, default is false
     */
     void write_ubjson(const BasicJsonType& j, const bool use_count,
                       const bool use_type, const bool add_prefix = true,
-                      const bool use_bjdata = false)
+                      const bool use_bjdata = false, const bool bjdata_draft3_binary = false)
     {
         switch (j.type())
         {
@@ -829,7 +830,7 @@ class binary_writer
 
                 for (const auto& el : *j.m_data.m_value.array)
                 {
-                    write_ubjson(el, use_count, use_type, prefix_required, use_bjdata);
+                    write_ubjson(el, use_count, use_type, prefix_required, use_bjdata, bjdata_draft3_binary);
                 }
 
                 if (!use_count)
@@ -847,11 +848,11 @@ class binary_writer
                     oa->write_character(to_char_type('['));
                 }
 
-                if (use_type && (use_bjdata || !j.m_data.m_value.binary->empty()))
+                if (use_type && ((use_bjdata && bjdata_draft3_binary) || !j.m_data.m_value.binary->empty()))
                 {
                     JSON_ASSERT(use_count);
                     oa->write_character(to_char_type('$'));
-                    oa->write_character(use_bjdata ? 'B' : 'U');
+                    oa->write_character(use_bjdata && bjdata_draft3_binary ? 'B' : 'U');
                 }
 
                 if (use_count)
@@ -870,7 +871,7 @@ class binary_writer
                 {
                     for (size_t i = 0; i < j.m_data.m_value.binary->size(); ++i)
                     {
-                        oa->write_character(to_char_type(use_bjdata ? 'B' : 'U'));
+                        oa->write_character(to_char_type((use_bjdata && bjdata_draft3_binary) ? 'B' : 'U'));
                         oa->write_character(j.m_data.m_value.binary->data()[i]);
                     }
                 }
@@ -887,7 +888,7 @@ class binary_writer
             {
                 if (use_bjdata && j.m_data.m_value.object->size() == 3 && j.m_data.m_value.object->find("_ArrayType_") != j.m_data.m_value.object->end() && j.m_data.m_value.object->find("_ArraySize_") != j.m_data.m_value.object->end() && j.m_data.m_value.object->find("_ArrayData_") != j.m_data.m_value.object->end())
                 {
-                    if (!write_bjdata_ndarray(*j.m_data.m_value.object, use_count, use_type))  // decode bjdata ndarray in the JData format (https://github.com/NeuroJSON/jdata)
+                    if (!write_bjdata_ndarray(*j.m_data.m_value.object, use_count, use_type, bjdata_draft3_binary))  // decode bjdata ndarray in the JData format (https://github.com/NeuroJSON/jdata)
                     {
                         break;
                     }
@@ -931,7 +932,7 @@ class binary_writer
                     oa->write_characters(
                         reinterpret_cast<const CharType*>(el.first.c_str()),
                         el.first.size());
-                    write_ubjson(el.second, use_count, use_type, prefix_required, use_bjdata);
+                    write_ubjson(el.second, use_count, use_type, prefix_required, use_bjdata, bjdata_draft3_binary);
                 }
 
                 if (!use_count)
@@ -1615,7 +1616,7 @@ class binary_writer
     /*!
     @return false if the object is successfully converted to a bjdata ndarray, true if the type or size is invalid
     */
-    bool write_bjdata_ndarray(const typename BasicJsonType::object_t& value, const bool use_count, const bool use_type)
+    bool write_bjdata_ndarray(const typename BasicJsonType::object_t& value, const bool use_count, const bool use_type, const bool bjdata_draft3_binary)
     {
         std::map<string_t, CharType> bjdtype = {{"uint8", 'U'},  {"int8", 'i'},  {"uint16", 'u'}, {"int16", 'I'},
             {"uint32", 'm'}, {"int32", 'l'}, {"uint64", 'M'}, {"int64", 'L'}, {"single", 'd'}, {"double", 'D'},
@@ -1649,7 +1650,7 @@ class binary_writer
         oa->write_character('#');
 
         key = "_ArraySize_";
-        write_ubjson(value.at(key), use_count, use_type, true,  true);
+        write_ubjson(value.at(key), use_count, use_type, true,  true, bjdata_draft3_binary);
 
         key = "_ArrayData_";
         if (dtype == 'U' || dtype == 'C' || dtype == 'B')

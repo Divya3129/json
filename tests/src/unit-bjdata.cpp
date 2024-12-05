@@ -1529,247 +1529,315 @@ TEST_CASE("BJData")
 
         SECTION("binary")
         {
-            SECTION("N = 0..127")
+            for (bool draft3 :
+                    {
+                        false, true
+                    })
             {
-                for (std::size_t N = 0; N <= 127; ++N)
+                CAPTURE(draft3)
+
+                SECTION("N = 0..127")
                 {
-                    CAPTURE(N)
-
-                    // create JSON value with byte array containing of N * 'x'
-                    const auto s = std::vector<std::uint8_t>(N, 'x');
-                    json const j = json::binary(s);
-
-                    // create expected byte vector
-                    std::vector<std::uint8_t> expected;
-                    expected.push_back(static_cast<std::uint8_t>('['));
-                    expected.push_back(static_cast<std::uint8_t>('$'));
-                    expected.push_back(static_cast<std::uint8_t>('B'));
-                    expected.push_back(static_cast<std::uint8_t>('#'));
-                    expected.push_back(static_cast<std::uint8_t>('i'));
-                    expected.push_back(static_cast<std::uint8_t>(N));
-                    for (size_t i = 0; i < N; ++i)
+                    for (std::size_t N = 0; N <= 127; ++N)
                     {
-                        expected.push_back(0x78);
+                        CAPTURE(N)
+
+                        // create JSON value with byte array containing of N * 'x'
+                        const auto s = std::vector<std::uint8_t>(N, 'x');
+                        json const j = json::binary(s);
+
+                        // create expected byte vector
+                        std::vector<std::uint8_t> expected;
+                        expected.push_back(static_cast<std::uint8_t>('['));
+                        if (draft3 || N != 0)
+                        {
+                            expected.push_back(static_cast<std::uint8_t>('$'));
+                            expected.push_back(static_cast<std::uint8_t>(draft3 ? 'B' : 'U'));
+                        }
+                        expected.push_back(static_cast<std::uint8_t>('#'));
+                        expected.push_back(static_cast<std::uint8_t>('i'));
+                        expected.push_back(static_cast<std::uint8_t>(N));
+                        for (size_t i = 0; i < N; ++i)
+                        {
+                            expected.push_back(0x78);
+                        }
+
+                        // compare result + size
+                        const auto result = json::to_bjdata(j, true, true, draft3);
+                        CHECK(result == expected);
+                        if (!draft3 && N == 0)
+                        {
+                            CHECK(result.size() == N + 4);
+                        }
+                        else
+                        {
+                            CHECK(result.size() == N + 6);
+                        }
+
+                        // check that no null byte is appended
+                        if (N > 0)
+                        {
+                            CHECK(result.back() != '\x00');
+                        }
+
+                        if (draft3)
+                        {
+                            // roundtrip
+                            CHECK(json::from_bjdata(result) == j);
+                            CHECK(json::from_bjdata(result, true, false) == j);
+                        }
+                        else
+                        {
+                            // roundtrip only works to an array of numbers
+                            json j_out = s;
+                            CHECK(json::from_bjdata(result) == j_out);
+                            CHECK(json::from_bjdata(result, true, false) == j_out);
+                        }
                     }
+                }
 
-                    // compare result + size
-                    const auto result = json::to_bjdata(j, true, true);
-                    CHECK(result == expected);
-                    CHECK(result.size() == N + 6);
-
-                    // check that no null byte is appended
-                    if (N > 0)
+                SECTION("N = 128..255")
+                {
+                    for (std::size_t N = 128; N <= 255; ++N)
                     {
+                        CAPTURE(N)
+
+                        // create JSON value with byte array containing of N * 'x'
+                        const auto s = std::vector<std::uint8_t>(N, 'x');
+                        json const j = json::binary(s);
+
+                        // create expected byte vector
+                        std::vector<uint8_t> expected;
+                        expected.push_back(static_cast<std::uint8_t>('['));
+                        expected.push_back(static_cast<std::uint8_t>('$'));
+                        expected.push_back(static_cast<std::uint8_t>(draft3 ? 'B' : 'U'));
+                        expected.push_back(static_cast<std::uint8_t>('#'));
+                        expected.push_back(static_cast<std::uint8_t>('U'));
+                        expected.push_back(static_cast<std::uint8_t>(N));
+                        for (size_t i = 0; i < N; ++i)
+                        {
+                            expected.push_back(0x78);
+                        }
+
+                        // compare result + size
+                        const auto result = json::to_bjdata(j, true, true, draft3);
+                        CHECK(result == expected);
+                        CHECK(result.size() == N + 6);
+                        // check that no null byte is appended
                         CHECK(result.back() != '\x00');
-                    }
 
-                    // roundtrip
-                    CHECK(json::from_bjdata(result) == j);
-                    CHECK(json::from_bjdata(result, true, false) == j);
-                }
-            }
-
-            SECTION("N = 128..255")
-            {
-                for (std::size_t N = 128; N <= 255; ++N)
-                {
-                    CAPTURE(N)
-
-                    // create JSON value with byte array containing of N * 'x'
-                    const auto s = std::vector<std::uint8_t>(N, 'x');
-                    json const j = json::binary(s);
-
-                    // create expected byte vector
-                    std::vector<uint8_t> expected;
-                    expected.push_back(static_cast<std::uint8_t>('['));
-                    expected.push_back(static_cast<std::uint8_t>('$'));
-                    expected.push_back(static_cast<std::uint8_t>('B'));
-                    expected.push_back(static_cast<std::uint8_t>('#'));
-                    expected.push_back(static_cast<std::uint8_t>('U'));
-                    expected.push_back(static_cast<std::uint8_t>(N));
-                    for (size_t i = 0; i < N; ++i)
-                    {
-                        expected.push_back(0x78);
-                    }
-
-                    // compare result + size
-                    const auto result = json::to_bjdata(j, true, true);
-                    CHECK(result == expected);
-                    CHECK(result.size() == N + 6);
-                    // check that no null byte is appended
-                    CHECK(result.back() != '\x00');
-
-                    // roundtrip
-                    CHECK(json::from_bjdata(result) == j);
-                    CHECK(json::from_bjdata(result, true, false) == j);
-                }
-            }
-
-            SECTION("N = 256..32767")
-            {
-                for (const std::size_t N :
+                        if (draft3)
                         {
-                            256u, 999u, 1025u, 3333u, 2048u, 32767u
-                        })
-                {
-                    CAPTURE(N)
-
-                    // create JSON value with byte array containing of N * 'x'
-                    const auto s = std::vector<std::uint8_t>(N, 'x');
-                    json const j = json::binary(s);
-
-                    // create expected byte vector
-                    std::vector<std::uint8_t> expected(N + 7, 'x');
-                    expected[0] = '[';
-                    expected[1] = '$';
-                    expected[2] = 'B';
-                    expected[3] = '#';
-                    expected[4] = 'I';
-                    expected[5] = static_cast<std::uint8_t>(N & 0xFF);
-                    expected[6] = static_cast<std::uint8_t>((N >> 8) & 0xFF);
-
-                    // compare result + size
-                    const auto result = json::to_bjdata(j, true, true);
-                    CHECK(result == expected);
-                    CHECK(result.size() == N + 7);
-                    // check that no null byte is appended
-                    CHECK(result.back() != '\x00');
-
-                    // roundtrip
-                    CHECK(json::from_bjdata(result) == j);
-                    CHECK(json::from_bjdata(result, true, false) == j);
-                }
-            }
-
-            SECTION("N = 32768..65535")
-            {
-                for (const std::size_t N :
+                            // roundtrip
+                            CHECK(json::from_bjdata(result) == j);
+                            CHECK(json::from_bjdata(result, true, false) == j);
+                        }
+                        else
                         {
-                            32768u, 55555u, 65535u
-                        })
-                {
-                    CAPTURE(N)
-
-                    // create JSON value with byte array containing of N * 'x'
-                    const auto s = std::vector<std::uint8_t>(N, 'x');
-                    json const j = json::binary(s);
-
-                    // create expected byte vector
-                    std::vector<std::uint8_t> expected(N + 7, 'x');
-                    expected[0] = '[';
-                    expected[1] = '$';
-                    expected[2] = 'B';
-                    expected[3] = '#';
-                    expected[4] = 'u';
-                    expected[5] = static_cast<std::uint8_t>(N & 0xFF);
-                    expected[6] = static_cast<std::uint8_t>((N >> 8) & 0xFF);
-
-                    // compare result + size
-                    const auto result = json::to_bjdata(j, true, true);
-                    CHECK(result == expected);
-                    CHECK(result.size() == N + 7);
-                    // check that no null byte is appended
-                    CHECK(result.back() != '\x00');
-
-                    // roundtrip
-                    CHECK(json::from_bjdata(result) == j);
-                    CHECK(json::from_bjdata(result, true, false) == j);
+                            // roundtrip only works to an array of numbers
+                            json j_out = s;
+                            CHECK(json::from_bjdata(result) == j_out);
+                            CHECK(json::from_bjdata(result, true, false) == j_out);
+                        }
+                    }
                 }
-            }
 
-            SECTION("N = 65536..2147483647")
-            {
-                for (const std::size_t N :
+                SECTION("N = 256..32767")
+                {
+                    for (const std::size_t N :
+                            {
+                                256u, 999u, 1025u, 3333u, 2048u, 32767u
+                            })
+                    {
+                        CAPTURE(N)
+
+                        // create JSON value with byte array containing of N * 'x'
+                        const auto s = std::vector<std::uint8_t>(N, 'x');
+                        json const j = json::binary(s);
+
+                        // create expected byte vector
+                        std::vector<std::uint8_t> expected(N + 7, 'x');
+                        expected[0] = '[';
+                        expected[1] = '$';
+                        expected[2] = draft3 ? 'B' : 'U';
+                        expected[3] = '#';
+                        expected[4] = 'I';
+                        expected[5] = static_cast<std::uint8_t>(N & 0xFF);
+                        expected[6] = static_cast<std::uint8_t>((N >> 8) & 0xFF);
+
+                        // compare result + size
+                        const auto result = json::to_bjdata(j, true, true, draft3);
+                        CHECK(result == expected);
+                        CHECK(result.size() == N + 7);
+                        // check that no null byte is appended
+                        CHECK(result.back() != '\x00');
+
+                        if (draft3)
                         {
-                            65536u, 77777u, 1048576u
-                        })
-                {
-                    CAPTURE(N)
+                            // roundtrip
+                            CHECK(json::from_bjdata(result) == j);
+                            CHECK(json::from_bjdata(result, true, false) == j);
+                        }
+                        else
+                        {
+                            // roundtrip only works to an array of numbers
+                            json j_out = s;
+                            CHECK(json::from_bjdata(result) == j_out);
+                            CHECK(json::from_bjdata(result, true, false) == j_out);
+                        }
+                    }
+                }
 
-                    // create JSON value with byte array containing of N * 'x'
+                SECTION("N = 32768..65535")
+                {
+                    for (const std::size_t N :
+                            {
+                                32768u, 55555u, 65535u
+                            })
+                    {
+                        CAPTURE(N)
+
+                        // create JSON value with byte array containing of N * 'x'
+                        const auto s = std::vector<std::uint8_t>(N, 'x');
+                        json const j = json::binary(s);
+
+                        // create expected byte vector
+                        std::vector<std::uint8_t> expected(N + 7, 'x');
+                        expected[0] = '[';
+                        expected[1] = '$';
+                        expected[2] = draft3 ? 'B' : 'U';
+                        expected[3] = '#';
+                        expected[4] = 'u';
+                        expected[5] = static_cast<std::uint8_t>(N & 0xFF);
+                        expected[6] = static_cast<std::uint8_t>((N >> 8) & 0xFF);
+
+                        // compare result + size
+                        const auto result = json::to_bjdata(j, true, true, draft3);
+                        CHECK(result == expected);
+                        CHECK(result.size() == N + 7);
+                        // check that no null byte is appended
+                        CHECK(result.back() != '\x00');
+
+                        if (draft3)
+                        {
+                            // roundtrip
+                            CHECK(json::from_bjdata(result) == j);
+                            CHECK(json::from_bjdata(result, true, false) == j);
+                        }
+                        else
+                        {
+                            // roundtrip only works to an array of numbers
+                            json j_out = s;
+                            CHECK(json::from_bjdata(result) == j_out);
+                            CHECK(json::from_bjdata(result, true, false) == j_out);
+                        }
+                    }
+                }
+
+                SECTION("N = 65536..2147483647")
+                {
+                    for (const std::size_t N :
+                            {
+                                65536u, 77777u, 1048576u
+                            })
+                    {
+                        CAPTURE(N)
+
+                        // create JSON value with byte array containing of N * 'x'
+                        const auto s = std::vector<std::uint8_t>(N, 'x');
+                        json const j = json::binary(s);
+
+                        // create expected byte vector
+                        std::vector<std::uint8_t> expected(N + 9, 'x');
+                        expected[0] = '[';
+                        expected[1] = '$';
+                        expected[2] = draft3 ? 'B' : 'U';
+                        expected[3] = '#';
+                        expected[4] = 'l';
+                        expected[5] = static_cast<std::uint8_t>(N & 0xFF);
+                        expected[6] = static_cast<std::uint8_t>((N >> 8) & 0xFF);
+                        expected[7] = static_cast<std::uint8_t>((N >> 16) & 0xFF);
+                        expected[8] = static_cast<std::uint8_t>((N >> 24) & 0xFF);
+
+                        // compare result + size
+                        const auto result = json::to_bjdata(j, true, true, draft3);
+                        CHECK(result == expected);
+                        CHECK(result.size() == N + 9);
+                        // check that no null byte is appended
+                        CHECK(result.back() != '\x00');
+
+                        if (draft3)
+                        {
+                            // roundtrip
+                            CHECK(json::from_bjdata(result) == j);
+                            CHECK(json::from_bjdata(result, true, false) == j);
+                        }
+                        else
+                        {
+                            // roundtrip only works to an array of numbers
+                            json j_out = s;
+                            CHECK(json::from_bjdata(result) == j_out);
+                            CHECK(json::from_bjdata(result, true, false) == j_out);
+                        }
+                    }
+                }
+
+                SECTION("Other Serializations")
+                {
+                    const std::size_t N = 10;
                     const auto s = std::vector<std::uint8_t>(N, 'x');
                     json const j = json::binary(s);
 
-                    // create expected byte vector
-                    std::vector<std::uint8_t> expected(N + 9, 'x');
-                    expected[0] = '[';
-                    expected[1] = '$';
-                    expected[2] = 'B';
-                    expected[3] = '#';
-                    expected[4] = 'l';
-                    expected[5] = static_cast<std::uint8_t>(N & 0xFF);
-                    expected[6] = static_cast<std::uint8_t>((N >> 8) & 0xFF);
-                    expected[7] = static_cast<std::uint8_t>((N >> 16) & 0xFF);
-                    expected[8] = static_cast<std::uint8_t>((N >> 24) & 0xFF);
-
-                    // compare result + size
-                    const auto result = json::to_bjdata(j, true, true);
-                    CHECK(result == expected);
-                    CHECK(result.size() == N + 9);
-                    // check that no null byte is appended
-                    CHECK(result.back() != '\x00');
-
-                    // roundtrip
-                    CHECK(json::from_bjdata(result) == j);
-                    CHECK(json::from_bjdata(result, true, false) == j);
-                }
-            }
-
-            SECTION("Other Serializations")
-            {
-                const std::size_t N = 10;
-                const auto s = std::vector<std::uint8_t>(N, 'x');
-                json const j = json::binary(s);
-
-                SECTION("No Count No Type")
-                {
-                    std::vector<uint8_t> expected;
-                    expected.push_back(static_cast<std::uint8_t>('['));
-                    for (std::size_t i = 0; i < N; ++i)
+                    SECTION("No Count No Type")
                     {
-                        expected.push_back(static_cast<std::uint8_t>('B'));
-                        expected.push_back(static_cast<std::uint8_t>(0x78));
-                    }
-                    expected.push_back(static_cast<std::uint8_t>(']'));
+                        std::vector<uint8_t> expected;
+                        expected.push_back(static_cast<std::uint8_t>('['));
+                        for (std::size_t i = 0; i < N; ++i)
+                        {
+                            expected.push_back(static_cast<std::uint8_t>(draft3 ? 'B' : 'U'));
+                            expected.push_back(static_cast<std::uint8_t>(0x78));
+                        }
+                        expected.push_back(static_cast<std::uint8_t>(']'));
 
-                    // compare result + size
-                    const auto result = json::to_bjdata(j, false, false);
-                    CHECK(result == expected);
-                    CHECK(result.size() == N + 12);
-                    // check that no null byte is appended
-                    CHECK(result.back() != '\x00');
+                        // compare result + size
+                        const auto result = json::to_bjdata(j, false, false, draft3);
+                        CHECK(result == expected);
+                        CHECK(result.size() == N + 12);
+                        // check that no null byte is appended
+                        CHECK(result.back() != '\x00');
 
-                    // roundtrip only works to an array of numbers
-                    json j_out = s;
-                    CHECK(json::from_bjdata(result) == j_out);
-                    CHECK(json::from_bjdata(result, true, false) == j_out);
-                }
-
-                SECTION("Yes Count No Type")
-                {
-                    std::vector<std::uint8_t> expected;
-                    expected.push_back(static_cast<std::uint8_t>('['));
-                    expected.push_back(static_cast<std::uint8_t>('#'));
-                    expected.push_back(static_cast<std::uint8_t>('i'));
-                    expected.push_back(static_cast<std::uint8_t>(N));
-
-                    for (size_t i = 0; i < N; ++i)
-                    {
-                        expected.push_back(static_cast<std::uint8_t>('B'));
-                        expected.push_back(static_cast<std::uint8_t>(0x78));
+                        // roundtrip only works to an array of numbers
+                        json j_out = s;
+                        CHECK(json::from_bjdata(result) == j_out);
+                        CHECK(json::from_bjdata(result, true, false) == j_out);
                     }
 
-                    // compare result + size
-                    const auto result = json::to_bjdata(j, true, false);
-                    CHECK(result == expected);
-                    CHECK(result.size() == N + 14);
-                    // check that no null byte is appended
-                    CHECK(result.back() != '\x00');
+                    SECTION("Yes Count No Type")
+                    {
+                        std::vector<std::uint8_t> expected;
+                        expected.push_back(static_cast<std::uint8_t>('['));
+                        expected.push_back(static_cast<std::uint8_t>('#'));
+                        expected.push_back(static_cast<std::uint8_t>('i'));
+                        expected.push_back(static_cast<std::uint8_t>(N));
 
-                    // roundtrip only works to an array of numbers
-                    json j_out = s;
-                    CHECK(json::from_bjdata(result) == j_out);
-                    CHECK(json::from_bjdata(result, true, false) == j_out);
+                        for (size_t i = 0; i < N; ++i)
+                        {
+                            expected.push_back(static_cast<std::uint8_t>(draft3 ? 'B' : 'U'));
+                            expected.push_back(static_cast<std::uint8_t>(0x78));
+                        }
+
+                        // compare result + size
+                        const auto result = json::to_bjdata(j, true, false, draft3);
+                        CHECK(result == expected);
+                        CHECK(result.size() == N + 14);
+                        // check that no null byte is appended
+                        CHECK(result.back() != '\x00');
+
+                        // roundtrip only works to an array of numbers
+                        json j_out = s;
+                        CHECK(json::from_bjdata(result) == j_out);
+                        CHECK(json::from_bjdata(result, true, false) == j_out);
+                    }
                 }
             }
         }
@@ -2428,7 +2496,8 @@ TEST_CASE("BJData")
                 CHECK(json::to_bjdata(json::from_bjdata(v_D), true, true) == v_D);
                 CHECK(json::to_bjdata(json::from_bjdata(v_S), true, true) == v_S);
                 CHECK(json::to_bjdata(json::from_bjdata(v_C), true, true) == v_S); // char is serialized to string
-                CHECK(json::to_bjdata(json::from_bjdata(v_B), true, true) == v_B);
+                CHECK(json::to_bjdata(json::from_bjdata(v_B), true, true, false) == v_U); // binary is serialized to uint8 (draft2)
+                CHECK(json::to_bjdata(json::from_bjdata(v_B), true, true, true) == v_B);
             }
 
             SECTION("optimized ndarray (type and vector-size as optimized 1D array)")
@@ -3255,7 +3324,7 @@ TEST_CASE("Universal Binary JSON Specification Examples 1")
         });
         json const j = {{"binary", json::binary(s)}, {"val", 123}};
         std::vector<uint8_t> const v = {'{', 'i', 6, 'b', 'i', 'n', 'a', 'r', 'y', '[', '$', 'B', '#', 'i', 4, 222, 173, 190, 239, 'i', 3, 'v', 'a', 'l', 'i', 123, '}'};
-        //CHECK(json::to_bjdata(j) == v);
+        //CHECK(json::to_bjdata(j) == v); // 123 value gets encoded as uint8
         CHECK(json::from_bjdata(v) == j);
     }
 

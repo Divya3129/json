@@ -4309,27 +4309,30 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     /// @sa https://json.nlohmann.me/api/basic_json/to_bjdata/
     static std::vector<std::uint8_t> to_bjdata(const basic_json& j,
             const bool use_size = false,
-            const bool use_type = false)
+            const bool use_type = false,
+            const bool draft3_binary = false)
     {
         std::vector<std::uint8_t> result;
-        to_bjdata(j, result, use_size, use_type);
+        to_bjdata(j, result, use_size, use_type, draft3_binary);
         return result;
     }
 
     /// @brief create a BJData serialization of a given JSON value
     /// @sa https://json.nlohmann.me/api/basic_json/to_bjdata/
     static void to_bjdata(const basic_json& j, detail::output_adapter<std::uint8_t> o,
-                          const bool use_size = false, const bool use_type = false)
+                          const bool use_size = false, const bool use_type = false,
+                          const bool draft3_binary = false)
     {
-        binary_writer<std::uint8_t>(o).write_ubjson(j, use_size, use_type, true, true);
+        binary_writer<std::uint8_t>(o).write_ubjson(j, use_size, use_type, true, true, draft3_binary);
     }
 
     /// @brief create a BJData serialization of a given JSON value
     /// @sa https://json.nlohmann.me/api/basic_json/to_bjdata/
     static void to_bjdata(const basic_json& j, detail::output_adapter<char> o,
-                          const bool use_size = false, const bool use_type = false)
+                          const bool use_size = false, const bool use_type = false,
+                          const bool draft3_binary = false)
     {
-        binary_writer<char>(o).write_ubjson(j, use_size, use_type, true, true);
+        binary_writer<char>(o).write_ubjson(j, use_size, use_type, true, true, draft3_binary);
     }
 
     /// @brief create a BSON serialization of a given JSON value

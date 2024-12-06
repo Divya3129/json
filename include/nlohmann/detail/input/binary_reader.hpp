@@ -322,6 +322,12 @@ class binary_reader
                 return get_number<std::int32_t, true>(input_format_t::bson, value) && sax->number_integer(value);
             }
 
+            case 0x11: // uint64
+            {
+                std::uint64_t value{};
+                return get_number<std::uint64_t, true>(input_format_t::bson, value) && sax->number_integer(value);
+            }
+
             case 0x12: // int64
             {
                 std::int64_t value{};

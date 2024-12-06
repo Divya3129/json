@@ -16,6 +16,7 @@
 #include <vector> // vector
 
 #include <nlohmann/detail/abi_macros.hpp>
+#include <nlohmann/detail/json_base_class_with_start_end_markers.hpp>
 
 /*!
 @brief namespace for Niels Lohmann
@@ -69,6 +70,20 @@ struct ordered_map;
 /// @brief specialization that maintains the insertion order of object keys
 /// @sa https://json.nlohmann.me/api/ordered_json/
 using ordered_json = basic_json<nlohmann::ordered_map>;
+
+/// @brief a minimal specialization that uses the base class json_base_class_with_start_end_markers
+using json_with_start_end_markers = nlohmann::basic_json <
+                                    std::map,
+                                    std::vector,
+                                    std::string,
+                                    bool,
+                                    std::int64_t,
+                                    std::uint64_t,
+                                    double,
+                                    std::allocator,
+                                    nlohmann::adl_serializer,
+                                    std::vector<std::uint8_t>,
+                                    ::nlohmann::detail::json_base_class_with_start_end_markers >;
 
 NLOHMANN_JSON_NAMESPACE_END
 

@@ -162,11 +162,11 @@ struct adl_serializer<NonDefaultConstructible>
 // for #2824
 /////////////////////////////////////////////////////////////////////
 
-class sax_no_exception : public nlohmann::detail::json_sax_dom_parser<json>
+class sax_no_exception : public nlohmann::detail::json_sax_dom_parser<json, decltype(nlohmann::detail::input_adapter(""))>
 {
   public:
     explicit sax_no_exception(json& j)
-        : nlohmann::detail::json_sax_dom_parser<json>(j, false)
+        : nlohmann::detail::json_sax_dom_parser<json, decltype(nlohmann::detail::input_adapter(""))>(j, false)
     {}
 
     static bool parse_error(std::size_t /*position*/, const std::string& /*last_token*/, const json::exception& ex)

@@ -117,6 +117,41 @@
     }  // namespace nlohmann
 #endif
 
+// #include <nlohmann/detail/json_base_class_with_start_end_markers.hpp>
+//     __ _____ _____ _____
+//  __|  |   __|     |   | |  JSON for Modern C++
+// |  |  |__   |  |  | | | |  version 3.11.3
+// |_____|_____|_____|_|___|  https://github.com/nlohmann/json
+//
+// SPDX-FileCopyrightText: 2013-2023 Niels Lohmann <https://nlohmann.me>
+// SPDX-License-Identifier: MIT
+
+
+
+#include <string> // string::npos
+
+// #include <nlohmann/detail/abi_macros.hpp>
+
+
+NLOHMANN_JSON_NAMESPACE_BEGIN
+namespace detail
+{
+
+/*!
+@brief Custom base struct of the @ref basic_json class.
+This class exposes the start and end positions for all fields of a JSON object
+with reference to the parsed input.
+*/
+struct json_base_class_with_start_end_markers
+{
+  public:
+    size_t start_position = std::string::npos;
+    size_t end_position = std::string::npos;
+};
+
+}  // namespace detail
+NLOHMANN_JSON_NAMESPACE_END
+
 
 /*!
 @brief namespace for Niels Lohmann
@@ -170,6 +205,20 @@ struct ordered_map;
 /// @brief specialization that maintains the insertion order of object keys
 /// @sa https://json.nlohmann.me/api/ordered_json/
 using ordered_json = basic_json<nlohmann::ordered_map>;
+
+/// @brief a minimal specialization that uses the base class json_base_class_with_start_end_markers
+using json_with_start_end_markers = nlohmann::basic_json <
+                                    std::map,
+                                    std::vector,
+                                    std::string,
+                                    bool,
+                                    std::int64_t,
+                                    std::uint64_t,
+                                    double,
+                                    std::allocator,
+                                    nlohmann::adl_serializer,
+                                    std::vector<std::uint8_t>,
+                                    ::nlohmann::detail::json_base_class_with_start_end_markers >;
 
 NLOHMANN_JSON_NAMESPACE_END
 

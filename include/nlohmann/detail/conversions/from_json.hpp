@@ -325,9 +325,9 @@ inline void from_json(const BasicJsonType& j, typename BasicJsonType::binary_t& 
     bin = *j.template get_ptr<const typename BasicJsonType::binary_t*>();
 }
 
-template<typename BasicJsonType, typename ConstructibleObjectType,
-         enable_if_t<is_constructible_object_type<BasicJsonType, ConstructibleObjectType>::value&&
-         !std::is_enum<typename ConstructibleObjectType::key_type>::value, int> = 0>
+template < typename BasicJsonType, typename ConstructibleObjectType,
+           enable_if_t < is_constructible_object_type<BasicJsonType, ConstructibleObjectType>::value&&
+                         !std::is_enum<typename ConstructibleObjectType::key_type>::value, int > = 0 >
 inline void from_json(const BasicJsonType& j, ConstructibleObjectType& obj)
 {
     if (JSON_HEDLEY_UNLIKELY(!j.is_object()))
@@ -348,10 +348,10 @@ inline void from_json(const BasicJsonType& j, ConstructibleObjectType& obj)
     obj = std::move(ret);
 }
 
-template <typename BasicJsonType, typename Key, typename Value, typename Compare, typename Allocator,
-          enable_if_t<is_constructible_object_type<BasicJsonType, std::map<Key, Value, Compare, Allocator>>::value&&
-          is_compatible_object_type<BasicJsonType, std::map<Key, Value, Compare, Allocator>>::value&&
-          std::is_enum<Key>::value, int> = 0>
+template < typename BasicJsonType, typename Key, typename Value, typename Compare, typename Allocator,
+           enable_if_t < is_constructible_object_type<BasicJsonType, std::map<Key, Value, Compare, Allocator>>::value&&
+                         is_compatible_object_type<BasicJsonType, std::map<Key, Value, Compare, Allocator>>::value&&
+                         std::is_enum<Key>::value, int > = 0 >
 inline void from_json(const BasicJsonType& j, std::map<Key, Value, Compare, Allocator>& m)
 {
     if (JSON_HEDLEY_UNLIKELY(!j.is_object()))
@@ -361,7 +361,7 @@ inline void from_json(const BasicJsonType& j, std::map<Key, Value, Compare, Allo
     m.clear();
     for (const auto& p : j.items())
     {
-        m.emplace(string_to_enum(json(p.key()),Key()), p.value().template get<Value>());
+        m.emplace(string_to_enum(json(p.key()), Key()), p.value().template get<Value>());
     }
 }
 
@@ -459,7 +459,7 @@ auto from_json(BasicJsonType&& j, TupleRelated&& t)
 template < typename BasicJsonType, typename Key, typename Value, typename Compare, typename Allocator,
            typename = enable_if_t < !std::is_constructible <
                                         typename BasicJsonType::string_t, Key >::value &&
-                                    !is_compatible_object_type<BasicJsonType, std::map<Key, Value, Compare, Allocator>>::value>>
+                                    !is_compatible_object_type<BasicJsonType, std::map<Key, Value, Compare, Allocator>>::value >>
 inline void from_json(const BasicJsonType& j, std::map<Key, Value, Compare, Allocator>& m)
 {
     if (JSON_HEDLEY_UNLIKELY(!j.is_array()))

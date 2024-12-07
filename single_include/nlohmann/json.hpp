@@ -5776,7 +5776,8 @@ struct external_constructor<value_t::object>
 
     template < typename BasicJsonType, typename CompatibleObjectType,
                enable_if_t < !std::is_same<CompatibleObjectType, typename BasicJsonType::object_t>::value&&
-                             is_compatible_object_type<BasicJsonType, CompatibleObjectType>::value&& !is_basic_json<CompatibleObjectType>::value&&
+                             is_compatible_object_type<BasicJsonType, CompatibleObjectType>::value&&
+                             !is_basic_json<CompatibleObjectType>::value&&
                              !std::is_enum<typename  CompatibleObjectType::key_type>::value, int > = 0 >
     static void construct(BasicJsonType& j, const CompatibleObjectType& obj)
     {
@@ -5915,7 +5916,8 @@ inline void to_json(BasicJsonType& j, typename BasicJsonType::array_t&& arr)
 }
 
 template < typename BasicJsonType, typename CompatibleObjectType,
-           enable_if_t < is_compatible_object_type<BasicJsonType, CompatibleObjectType>::value&& !is_basic_json<CompatibleObjectType>::value&&
+           enable_if_t < is_compatible_object_type<BasicJsonType, CompatibleObjectType>::value&&
+                         !is_basic_json<CompatibleObjectType>::value&&
                          !std::is_enum<typename  CompatibleObjectType::key_type>::value, int > = 0 >
 inline void to_json(BasicJsonType& j, const CompatibleObjectType& obj)
 {
@@ -5923,8 +5925,8 @@ inline void to_json(BasicJsonType& j, const CompatibleObjectType& obj)
 }
 
 template < typename BasicJsonType, typename Key, typename Value,
-           enable_if_t < (is_compatible_object_type<BasicJsonType, std::map<Key, Value>>::value)&&
-                         (!is_basic_json<std::map<Key, Value>>::value)&&
+           enable_if_t < is_compatible_object_type<BasicJsonType, std::map<Key, Value>>::value&&
+                         !is_basic_json<std::map<Key, Value>>::value&&
                          std::is_enum<Key>::value, int > = 0 >
 inline void to_json(BasicJsonType& j, const std::map<Key, Value>& obj)
 {

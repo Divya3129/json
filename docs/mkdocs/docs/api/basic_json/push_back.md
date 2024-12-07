@@ -27,6 +27,12 @@ void push_back(initializer_list_t init);
     `init` is converted into an object element and added using `push_back(const typename object_t::value_type&)`.
     Otherwise, `init` is converted to a JSON value and added using `push_back(basic_json&&)`.
 
+## Iterator invalidation
+
+For all cases where an element is added to an array, a reallocation can happen, in which case all iterators (including
+the [`end()`](end.md) iterator) and all references to the elements are invalidated. Otherwise, only the
+[`end()`](end.md) iterator is invalidated.
+
 ## Parameters
 
 `val` (in)
@@ -98,6 +104,11 @@ All functions can throw the following exception:
     ```json
     --8<-- "examples/push_back__initializer_list.output"
     ```
+
+## See also
+
+- [emplace_back](emplace_back.md) add a value to an array
+- [operator+=](operator+=.md) add a value to an array/object
 
 ## Version history
 

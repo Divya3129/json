@@ -24,6 +24,12 @@ void insert(const_iterator first, const_iterator last);
 4. Inserts elements from initializer list `ilist` into array before iterator `pos`.
 5. Inserts elements from range `[first, last)` into object.
 
+## Iterator invalidation
+
+For all cases where an element is added to an array, a reallocation can happen, in which case all iterators (including
+the [`end()`](end.md) iterator) and all references to the elements are invalidated. Otherwise, only the
+[`end()`](end.md) iterator is invalidated.
+
 ## Parameters
 
 `pos` (in)

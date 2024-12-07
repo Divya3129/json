@@ -386,7 +386,7 @@ struct is_constructible_object_type_impl <
          (std::is_move_assignable<ConstructibleObjectType>::value ||
           std::is_copy_assignable<ConstructibleObjectType>::value) &&
          (is_constructible<typename ConstructibleObjectType::key_type,
-           typename object_t::key_type>::value &&
+          typename object_t::key_type>::value &&
           std::is_same <
           typename object_t::mapped_type,
           typename ConstructibleObjectType::mapped_type >::value)) ||
